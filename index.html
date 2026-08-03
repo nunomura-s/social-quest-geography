@@ -1,0 +1,1924 @@
+﻿<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>社会クエスト 地理</title>
+<meta name="robots" content="noindex,nofollow,noarchive,noimageindex">
+<meta name="googlebot" content="noindex,nofollow,noarchive,noimageindex">
+<meta name="bingbot" content="noindex,nofollow,noarchive,noimageindex">
+<!-- version 39: password gate and search-engine exclusion -->
+<style>
+:root{
+  --ink:#233142;--muted:#63758a;--blue:#3478c9;--blue2:#eaf4ff;
+  --green:#42a56b;--gold:#e3a72f;--bg:#f4f7fb;--card:#fff;
+  --line:#dbe4ef;--danger:#d83e3e;
+}
+*{box-sizing:border-box}
+html,body,button,input,select,textarea,summary,option{font-family:"BIZ UDPGothic","BIZ UDゴシック","UD Digi Kyokasho N-R","UD デジタル 教科書体 N-R","Yu Gothic UI","Meiryo",sans-serif!important}
+body{margin:0;font-family:"BIZ UDPGothic","BIZ UDゴシック","UD Digi Kyokasho N-R","UD デジタル 教科書体 N-R","Yu Gothic UI","Meiryo",sans-serif;background:var(--bg);color:var(--ink);line-height:1.65;letter-spacing:.015em;font-feature-settings:"palt" 1}
+button,input,select,textarea,summary{font:inherit} button{touch-action:manipulation}
+.app{max-width:1160px;margin:auto;padding:18px}
+.top{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:14px}
+.brand{font-weight:900;font-size:clamp(24px,4vw,38px)}
+.brand small{font-size:.45em;color:var(--muted)}
+.stats{background:#fff;border:1px solid var(--line);border-radius:14px;padding:10px 14px;font-weight:700;white-space:nowrap}
+.card{background:var(--card);border:1px solid var(--line);border-radius:20px;box-shadow:0 8px 24px rgba(32,65,105,.07);padding:20px}
+.hidden{display:none!important}
+
+.profile-board{border:1px solid #b9d2ea;border-radius:18px;overflow:hidden;background:linear-gradient(180deg,#eef9ff 0%,#fbfff7 100%);margin-bottom:18px;box-shadow:0 6px 18px rgba(36,91,145,.08)}
+.profile-title{padding:9px 16px;background:linear-gradient(180deg,#397bc7,#2465ad);color:#fff;text-align:center;font-size:clamp(19px,2.4vw,27px);font-weight:900;letter-spacing:.08em}
+.profile-grid{display:grid;grid-template-columns:230px minmax(300px,1fr) 260px;gap:18px;padding:18px;align-items:stretch}
+.record-panel,.next-panel{border:2px solid #286fb8;border-radius:13px;background:#fffdf2;padding:12px 14px;box-shadow:0 4px 10px rgba(36,91,145,.08)}
+.record-panel h2,.next-panel h2{margin:-12px -14px 9px;padding:7px 10px;border-radius:10px 10px 0 0;color:#fff;text-align:center;font-size:17px;letter-spacing:.06em}
+.record-panel h2{background:linear-gradient(180deg,#367fc7,#1f62a4)}
+.next-panel{border-color:#d59d23;background:#fffdf5}.next-panel h2{background:linear-gradient(180deg,#e4b33d,#c58c12)}
+.record-row,.next-row{display:flex;align-items:flex-end;justify-content:space-between;gap:8px;padding:9px 2px;border-bottom:1px solid #d6d6c7}
+.record-row:last-child,.next-row:last-child{border-bottom:0}.record-row span,.next-row span{font-size:13px;font-weight:800}
+.record-row strong{font-size:17px;white-space:nowrap}.record-row strong b{font-size:24px}.next-row{align-items:center}.next-row strong{font-size:16px;color:#c92828;white-space:nowrap}
+
+.character-panel{position:relative;min-height:255px;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;padding-top:58px}
+.speech{
+  position:absolute;top:4px;left:50%;transform:translateX(-50%);
+  width:min(340px,92%);
+  padding:12px 16px;
+  border:2px solid #3177c3;border-radius:18px;
+  background:#fff;
+  text-align:center;font-weight:900;font-size:15px;line-height:1.45;
+  box-shadow:0 3px 8px rgba(33,78,128,.08)
+}
+.idea-board{
+  width:min(340px,96%);
+  min-height:210px;
+  margin:18px auto 0;
+  border:2px solid #d5e5f5;
+  border-radius:22px;
+  background:linear-gradient(180deg,#ffffff 0%,#f8fbff 100%);
+  box-shadow:0 6px 16px rgba(36,91,145,.08);
+  display:flex;align-items:center;justify-content:center;
+  padding:10px;
+}
+.evo-canvas{
+  position:relative;
+  width:100%;
+  height:210px;
+  overflow:visible;
+}
+.evo-layer{
+  position:absolute;
+  display:none;
+  object-fit:contain;
+  user-select:none;
+  -webkit-user-drag:none;
+  pointer-events:none;
+}
+/* 通常配置：魔法を最背面、イッシーを中央、ペットを右下に重ねる */
+.magic-layer{
+  width:47.6%; /* 前回サイズの70% */
+  left:34%;
+  top:36%; /* 足元より下にはみ出しにくいよう少し上へ */
+  transform:translate(-50%,-50%);
+  transform-origin:center center;
+  z-index:1;
+}
+.equip-layer{
+  width:85%;
+  left:50%;
+  top:55%;
+  transform:translate(-50%,-50%);
+  z-index:2;
+}
+.pet-layer{
+  width:59%;
+  left:81%;
+  top:73%; /* 足元より下へ出にくいよう少し上へ */
+  transform:translate(-50%,-50%);
+  z-index:3;
+}
+
+/* pet09：巨大ドラゴンを最背面、魔法とイッシーは小さくして下側に重ねる */
+.evo-canvas.pet09-special .pet-layer{
+  width:112%;
+  left:50%;
+  top:54%;
+  transform:translate(-50%,-50%);
+  z-index:1;
+}
+.evo-canvas.pet09-special .magic-layer{
+  width:20.4%; /* 通常を10としたとき約3 */
+  left:46%;
+  top:69%;
+  transform:translate(-50%,-50%);
+  z-index:2;
+}
+.evo-canvas.pet09-special .equip-layer{
+  width:25.5%; /* 通常を10としたとき約3 */
+  left:52%;
+  top:74%;
+  transform:translate(-50%,-50%);
+  z-index:3;
+}
+
+/* pet10：イッシーの位置は動かさず、右のペットとの間隔だけ狭める */
+.evo-canvas.pet10-special .magic-layer{
+  width:47.6%;
+  left:34%;
+  top:36%;
+  transform:translate(-50%,-50%);
+  z-index:1;
+}
+.evo-canvas.pet10-special .equip-layer{
+  width:85%;
+  left:50%;
+  top:55%;
+  transform:translate(-50%,-50%);
+  z-index:3;
+}
+.evo-canvas.pet10-special .pet-layer{
+  width:110.5%; /* 前回比130% */
+  left:85%; /* 約0.5cm右へ */
+  top:60%; /* 足元をそろえるため少し下げる */
+  transform:translate(-50%,-50%);
+  z-index:4; /* 一番前 */
+}
+
+/* 装備10だけ130%表示 */
+.evo-canvas.equip10-special .equip-layer{
+  width:110.5%;
+}
+.evo-canvas.pet09-special.equip10-special .equip-layer{
+  width:33.15%;
+}
+.evo-canvas.pet10-special.equip10-special .equip-layer{
+  width:110.5%;
+}
+
+.idea-fallback{
+  position:absolute;
+  inset:0;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  color:#4d6277;
+  line-height:1.55;
+  padding:16px;
+}
+.idea-fallback-title{
+  font-size:18px;font-weight:900;color:#244c7d;margin-bottom:6px;
+}
+.idea-fallback-text{
+  font-size:12px;font-weight:700;
+}
+.idea-fallback-file{
+  margin-top:6px;
+  font-size:11px;
+  color:#6c8094;
+}
+.start-toolbar-btn{padding:10px 17px;white-space:nowrap}
+
+
+.selection-toolbar{display:flex;align-items:center;justify-content:flex-end;gap:12px;flex-wrap:wrap;margin:14px 0}
+.mode-buttons{display:flex;gap:8px;flex-wrap:wrap}
+.btn{border:0;border-radius:13px;padding:12px 18px;font-weight:900;cursor:pointer;transition:transform .12s ease,box-shadow .12s ease,background .12s ease}
+.btn:hover{transform:translateY(-1px)}.btn:active{transform:translateY(0)}
+.btn:disabled{cursor:not-allowed;opacity:.48;transform:none}
+.primary{background:var(--blue);color:white}.secondary{background:#eaf0f7;color:var(--ink)}
+.good{background:var(--green);color:white}.warn{background:var(--gold);color:white}
+.small-btn{padding:9px 13px;border-radius:11px;font-size:14px}
+.mode-pill{display:flex;align-items:center;gap:6px;background:#f4f8fc;border:1px solid var(--line);border-radius:999px;padding:8px 12px;font-weight:800}
+.selection-info{padding:11px 14px;border-radius:12px;background:#eef6ff;border:1px solid #cfe2f8;font-weight:800;margin:10px 0}
+.tree{display:grid;gap:10px;max-height:56vh;overflow:auto;padding:2px 4px 2px 0}
+.quiz-card{border:1px solid var(--line);border-radius:15px;background:#fbfdff;overflow:hidden}
+.quiz-card>summary{list-style:none;display:flex;align-items:center;gap:12px;padding:14px 15px;cursor:pointer;font-weight:900;background:#f2f7fc;touch-action:manipulation;-webkit-tap-highlight-color:transparent}
+.quiz-card>summary::-webkit-details-marker{display:none}
+.quiz-card>summary::after{content:"＋";margin-left:auto;color:#6c7f93;font-size:20px}
+.quiz-card[open]>summary::after{content:"−"}
+.quiz-title{min-width:0}.quiz-title strong{display:block}.quiz-title small{display:block;color:var(--muted);font-weight:600;margin-top:2px}
+.tree-check{width:22px;height:22px;accent-color:var(--blue);flex:none;cursor:pointer;touch-action:manipulation;position:relative;z-index:5}
+.lessons{padding:10px 12px 14px;display:grid;gap:10px}
+.lesson-block{border:1px solid #e1e8f0;border-radius:13px;background:#fff;overflow:hidden}
+.lesson-head{display:flex;align-items:center;gap:12px;padding:12px 14px;background:#fafcff;border-bottom:1px solid #e8eef5;font-weight:900}
+.lesson-title-area{display:flex;align-items:center;gap:9px;min-width:0;cursor:pointer;flex:1;touch-action:manipulation;-webkit-tap-highlight-color:transparent}
+.lesson-title-area span{min-width:0}
+.category-list{display:grid;grid-template-columns:1fr;gap:8px;padding:10px 12px}
+.category-grid{display:grid;grid-template-columns:minmax(0,1fr) 68px 68px 68px;gap:5px;align-items:center;padding:10px;border:1px solid var(--line);border-radius:12px;background:#f8fbfe}
+.category-main{display:flex;align-items:center;gap:9px;min-width:0;cursor:pointer;touch-action:manipulation;-webkit-tap-highlight-color:transparent}
+.category-main:hover{filter:brightness(.99)}
+.category-main .count{color:var(--muted);font-size:13px;white-space:nowrap}
+.cat-badge{font-size:13px;font-weight:900;padding:4px 8px;border-radius:999px;background:#eaf4ff;color:#2465ad;white-space:nowrap}
+.cat-badge.exam{background:#fff3df;color:#9b6411}
+.medal-slot{pointer-events:none;min-height:58px;border:1px solid var(--line);border-radius:10px;background:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;padding:4px 2px}.medal-icon{font-size:19px;line-height:1}.medal-date{display:flex;flex-direction:column;align-items:center;font-size:8px;line-height:1.12;color:#68798b;white-space:nowrap;font-weight:700}
+.medal-slot.off{opacity:.18}
+.study-head{display:flex;justify-content:space-between;gap:12px;align-items:center}
+.progress-wrap{flex:1}.bar{height:12px;background:#e8eef5;border-radius:99px;overflow:hidden}.bar>div{height:100%;background:var(--green);width:0;transition:width .2s ease}
+.progress-text{font-weight:800;font-size:13px;margin-bottom:5px}
+
+.question{height:290px;letter-spacing:.025em;border:2px solid #d9e7f7;border-radius:18px;background:#fbfdff;padding:18px;display:grid;place-items:center;text-align:center;font-size:clamp(20px,3vw,30px);font-weight:800;line-height:1.55;overflow:auto}
+.question.text-question{padding:12px 18px;overflow:hidden}
+.question img{max-width:100%;max-height:228px;object-fit:contain;cursor:zoom-in}
+.fit-text{width:100%;max-width:100%;white-space:pre-wrap;overflow-wrap:anywhere;word-break:normal;text-align:center;line-height:1.24;font-weight:900}
+.question .fit-text{font-weight:800}
+.answer-stage{height:155px;margin-top:14px;position:relative}
+.answer,.answer-placeholder{position:absolute;letter-spacing:.025em;inset:0;border-radius:16px;padding:16px;font-size:clamp(20px,3vw,30px);font-weight:900;text-align:center;overflow:auto;display:grid;place-items:center}
+.answer.text-answer{padding:10px 16px;overflow:hidden}
+.answer{background:#fff9e7;border:1px solid #f1d690}
+.answer-placeholder{border:1px dashed #e1e8f0;background:#fafcff}
+.missing{font-size:14px;color:#9a5c23;font-weight:700}
+.study-actions{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:14px}
+.study-actions .btn{min-height:56px}
+.back-btn{grid-column:1/-1;margin-top:66px}
+.back-complete{background:#d83e3e!important;color:white!important;box-shadow:0 0 0 4px rgba(216,62,62,.14),0 8px 18px rgba(180,35,35,.24);animation:pulse 1.25s ease-in-out infinite}
+@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.012)}}
+.explanation-unavailable{visibility:hidden;pointer-events:none}
+.known-done{background:#2f8555!important}
+.modal{position:fixed;inset:0;background:rgba(16,30,46,.72);z-index:1000;display:grid;place-items:center;padding:20px}
+.modal-card{width:min(1080px,96vw);height:min(88vh,900px);background:#fff;border-radius:18px;display:flex;flex-direction:column;overflow:hidden;box-shadow:0 25px 70px rgba(0,0,0,.32)}
+.modal-head{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px 16px;border-bottom:1px solid var(--line);font-weight:900}
+.modal-body{flex:1;overflow:auto;padding:14px;display:grid;place-items:center;background:#f8fafc}
+.modal-body img{max-width:100%;max-height:100%;object-fit:contain}
+.close-modal{border:0;background:#eaf0f7;border-radius:10px;padding:8px 12px;font-weight:900;cursor:pointer}
+
+/* ===== Responsive layout v10: PC / tablet / smartphone ===== */
+html,body{max-width:100%;overflow-x:hidden}
+img{max-width:100%}
+button,.mode-pill{min-height:44px}
+
+@media(min-width:1200px){
+  .app{max-width:1280px;padding:22px}
+  .profile-grid{grid-template-columns:250px minmax(360px,1fr) 280px}
+  .tree{max-height:62vh}
+  .question{height:315px}
+  .question img{max-height:255px}
+  .study-actions{grid-template-columns:repeat(4,minmax(0,1fr))}
+  .back-btn{grid-column:1/-1;margin-top:66px}
+}
+
+@media(min-width:768px) and (max-width:1199px){
+  .app{max-width:100%;padding:14px}
+  .card{padding:16px}
+  .profile-grid{
+    grid-template-columns:minmax(220px,.8fr) minmax(330px,1.2fr);
+    gap:14px;
+    padding:14px;
+  }
+  .next-panel{
+    grid-column:1/-1;
+    display:grid;
+    grid-template-columns:repeat(3,minmax(0,1fr));
+    gap:8px;
+  }
+  .next-panel h2{grid-column:1/-1;margin:-12px -14px 0}
+  .next-row{
+    border:1px solid #ead9a9;
+    border-radius:10px;
+    background:#fff;
+    padding:9px;
+  }
+  .character-panel{min-height:220px}
+  .selection-toolbar{margin:10px 0}
+  .category-grid{
+    grid-template-columns:minmax(0,1fr) 62px 62px 62px;
+  }
+  .question{height:290px}
+  .question img{max-height:225px}
+}
+
+@media(max-width:767px){
+  body{background:#edf3f8}
+  .app{
+    width:100%;
+    padding:
+      max(8px,env(safe-area-inset-top))
+      max(8px,env(safe-area-inset-right))
+      max(14px,env(safe-area-inset-bottom))
+      max(8px,env(safe-area-inset-left));
+  }
+  .top{
+    flex-direction:row;
+    align-items:center;
+    gap:8px;
+    margin-bottom:8px;
+  }
+  .brand{
+    min-width:0;
+    font-size:clamp(19px,5.4vw,24px);
+    line-height:1.15;
+  }
+  .brand small{
+    display:block;
+    margin-top:2px;
+    font-size:10px;
+  }
+  .stats{
+    flex:none;
+    padding:6px 9px;
+    border-radius:10px;
+    font-size:11px;
+    white-space:nowrap;
+  }
+  .card{
+    padding:10px;
+    border-radius:14px;
+    box-shadow:0 4px 14px rgba(32,65,105,.07);
+  }
+
+  .profile-board{margin-bottom:10px;border-radius:14px}
+  .profile-title{padding:7px 10px;font-size:17px}
+  .profile-grid{
+    grid-template-columns:1fr;
+    gap:8px;
+    padding:9px;
+  }
+  .character-panel{
+    order:1;
+    min-height:220px;
+    padding-top:52px;
+  }
+  .record-panel{
+    order:2;
+    display:grid;
+    grid-template-columns:repeat(3,minmax(0,1fr));
+    gap:5px;
+    padding:9px;
+  }
+  .next-panel{
+    order:3;
+    display:grid;
+    grid-template-columns:repeat(3,minmax(0,1fr));
+    gap:5px;
+    padding:9px;
+  }
+  .record-panel h2,.next-panel h2{
+    grid-column:1/-1;
+    margin:-9px -9px 3px;
+    padding:5px 8px;
+    font-size:14px;
+  }
+  .record-row,.next-row{
+    min-width:0;
+    min-height:70px;
+    padding:6px 3px;
+    border:1px solid #d8e2ea;
+    border-radius:9px;
+    background:#fff;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    gap:2px;
+    text-align:center;
+  }
+  .record-row span,.next-row span{
+    font-size:9px;
+    line-height:1.3;
+  }
+  .record-row strong,.next-row strong{
+    max-width:100%;
+    font-size:11px;
+    line-height:1.25;
+    white-space:normal;
+    overflow-wrap:anywhere;
+  }
+  .record-row strong b{font-size:20px}
+  .speech{
+    top:0;
+    width:92%;
+    padding:7px 10px;
+    font-size:12px;
+    line-height:1.4;
+  }
+  
+  
+  
+  
+  
+  
+  
+  
+
+  .selection-toolbar{
+    position:sticky;
+    top:max(0px,env(safe-area-inset-top));
+    z-index:30;
+    margin:8px 0;
+    padding:6px;
+    border:1px solid rgba(207,225,243,.9);
+    border-radius:12px;
+    background:rgba(244,247,251,.95);
+    box-shadow:0 4px 12px rgba(32,65,105,.10);
+    backdrop-filter:blur(8px);
+  }
+  .mode-buttons{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:6px;
+    width:100%;
+  }
+  .mode-pill{
+    justify-content:center;
+    padding:7px 5px;
+    font-size:13px;
+  }
+  .start-toolbar-btn{
+    grid-column:1/-1;
+    width:100%;
+    min-height:46px;
+    padding:9px 10px;
+  }
+  .selection-info{
+    margin:7px 0;
+    padding:8px 10px;
+    font-size:12px;
+  }
+
+  .tree{max-height:none;overflow:visible;gap:7px}
+  .quiz-card{border-radius:12px;scroll-margin-top:115px}
+  .quiz-card>summary{
+    align-items:flex-start;
+    gap:7px;
+    padding:10px;
+    font-size:13px;
+  }
+  .quiz-card>summary::after{font-size:17px}
+  .quiz-title strong{
+    font-size:13px;
+    line-height:1.42;
+    overflow-wrap:anywhere;
+  }
+  .quiz-title small{font-size:9px}
+  .lessons{padding:6px;gap:6px}
+  .lesson-block{border-radius:10px}
+  .lesson-head{padding:8px;font-size:12px}
+  .lesson-title-area{align-items:flex-start;gap:6px}
+  .category-list{padding:6px;gap:6px}
+  .category-grid{
+    grid-template-columns:repeat(3,minmax(0,1fr));
+    gap:4px;
+    padding:7px;
+  }
+  .category-main{
+    grid-column:1/-1;
+    min-height:38px;
+    gap:7px;
+  }
+  .cat-badge{font-size:11px;padding:3px 7px}
+  .category-main .count{font-size:11px}
+  .medal-slot{
+    min-height:52px;
+    padding:3px 1px;
+    border-radius:8px;
+  }
+  .medal-icon{font-size:18px}
+  .medal-date{font-size:7px}
+
+  #studyScreen{min-height:calc(100dvh - 16px)}
+  .study-head{align-items:flex-start;gap:7px}
+  .progress-text{font-size:11px}
+  
+  
+  .question{
+    height:clamp(185px,34dvh,255px);
+    padding:9px;
+    border-radius:13px;
+    font-size:clamp(18px,5.7vw,25px);
+  }
+  .question img{max-height:30dvh}
+  .answer-stage{
+    height:clamp(105px,18dvh,140px);
+    margin-top:7px;
+  }
+  .answer,.answer-placeholder{
+    padding:9px;
+    border-radius:12px;
+    font-size:clamp(18px,5.5vw,25px);
+  }
+  .study-actions{
+    grid-template-columns:1fr 1fr;
+    gap:7px;
+    margin-top:7px;
+  }
+  .study-actions .btn{
+    min-height:49px;
+    padding:8px 5px;
+    border-radius:11px;
+    font-size:13px;
+    line-height:1.3;
+  }
+  .back-btn{grid-column:1/-1;margin-top:66px}
+
+  .modal{
+    padding:
+      max(6px,env(safe-area-inset-top))
+      max(6px,env(safe-area-inset-right))
+      max(6px,env(safe-area-inset-bottom))
+      max(6px,env(safe-area-inset-left));
+  }
+  .modal-card{
+    width:100%;
+    height:calc(100dvh - 12px);
+    border-radius:12px;
+  }
+  .modal-head{padding:9px 10px;font-size:13px}
+  .modal-body{padding:7px}
+}
+
+@media(max-width:420px){
+  .record-panel,.next-panel{
+    grid-template-columns:1fr;
+  }
+  .record-row,.next-row{
+    min-height:54px;
+    flex-direction:row;
+    justify-content:space-between;
+    padding:7px 9px;
+    text-align:left;
+  }
+  .record-row span,.next-row span{font-size:10px}
+  .record-row strong,.next-row strong{font-size:11px;text-align:right}
+  .record-row strong b{font-size:18px}
+  .profile-title{font-size:15px}
+  .category-grid{padding:6px}
+  .medal-date{font-size:6.5px}
+  .study-actions .btn{font-size:12px}
+}
+
+@media(orientation:landscape) and (max-height:600px) and (max-width:1000px){
+  .app{
+    padding:5px max(8px,env(safe-area-inset-right))
+    7px max(8px,env(safe-area-inset-left));
+  }
+  #studyScreen{padding:8px}
+  #studyScreen 
+  #studyScreen .question{height:35dvh;min-height:130px}
+  #studyScreen .question img{max-height:31dvh}
+  #studyScreen .answer-stage{height:19dvh;min-height:76px;margin-top:5px}
+  #studyScreen .study-actions{
+    grid-template-columns:repeat(5,minmax(0,1fr));
+    gap:5px;
+    margin-top:5px;
+  }
+  #studyScreen .study-actions .btn{
+    min-height:42px;
+    padding:5px 3px;
+    font-size:11px;
+  }
+  #studyScreen .back-btn{grid-column:auto}
+}
+
+
+@media(max-width:767px){
+  .idea-board{width:min(300px,98%);min-height:180px;margin-top:14px}.evo-canvas{height:180px}
+  .idea-fallback-title{font-size:16px}
+  .idea-fallback-text{font-size:11px}
+  .idea-fallback-file{font-size:10px}
+}
+@media(max-width:420px){
+  .idea-board{width:min(275px,98%);min-height:160px}.evo-canvas{height:160px}
+  .idea-fallback-title{font-size:15px}
+}
+
+@media (max-width:900px){
+}
+
+
+
+/* ===== Temporary placement-check controls ===== */
+.layout-test-panel{
+  margin:0 0 14px;
+  padding:11px 13px;
+  border:2px dashed #7c63c8;
+  border-radius:14px;
+  background:#f7f3ff;
+}
+.layout-test-title{font-weight:900;color:#513995;margin-bottom:7px}
+.layout-test-controls{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.layout-test-controls label{display:flex;align-items:center;justify-content:space-between;gap:7px;font-size:13px;font-weight:900}
+.layout-test-controls select{min-width:74px;padding:7px;border:1px solid #b8a9df;border-radius:9px;background:#fff;font-weight:900}
+.layout-test-note{margin-top:7px;font-size:11px;color:#675b7d;font-weight:700}
+@media(max-width:600px){.layout-test-controls{grid-template-columns:1fr}.layout-test-controls label{justify-content:space-between}}
+
+/* ===== Profile + collection ===== */
+.profile-open-btn{
+  margin-right:auto;
+  background:linear-gradient(180deg,#7558c9,#5b3dae);
+  color:#fff;
+  box-shadow:0 5px 14px rgba(91,61,174,.22)
+}
+.profile-open-btn:hover{box-shadow:0 7px 18px rgba(91,61,174,.3)}
+.profile-modal-card{width:min(1160px,97vw);height:min(92vh,960px)}
+.profile-modal-body{flex:1;overflow:auto;padding:18px;background:#f4f8fc}
+.profile-current-section{
+  display:grid;
+  grid-template-columns:minmax(270px,380px) minmax(300px,1fr);
+  gap:18px;
+  align-items:stretch;
+  margin-bottom:18px
+}
+.profile-visual-box,.profile-details-box,.collection-section{
+  border:1px solid #cfe0f1;
+  border-radius:18px;
+  background:#fff;
+  box-shadow:0 5px 16px rgba(38,85,130,.08)
+}
+.profile-visual-box{padding:14px;display:flex;align-items:center;justify-content:center;min-height:310px}
+.profile-visual-box .evo-canvas{height:285px;overflow:visible}
+.profile-details-box{padding:18px}
+.profile-details-box h2,.collection-section h2{margin:0 0 13px;font-size:21px;color:#244c7d}
+.profile-detail-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.profile-detail-item{
+  border:1px solid #d9e6f2;
+  border-radius:13px;
+  background:#f8fbff;
+  padding:11px 12px
+}
+.profile-detail-item span{display:block;font-size:11px;color:#647b91;font-weight:800;margin-bottom:3px}
+.profile-detail-item strong{font-size:16px;color:#1c334b;line-height:1.35}
+.profile-next-box{margin-top:12px;padding:12px;border-radius:13px;background:#fff8e7;border:1px solid #ecd59d;line-height:1.7;font-weight:800;color:#694c11}
+.collection-section{padding:18px}
+.collection-tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}
+.collection-tab{
+  border:1px solid #c9d9e9;
+  border-radius:999px;
+  padding:9px 15px;
+  background:#eef4fa;
+  color:#324c65;
+  font-weight:900;
+  cursor:pointer
+}
+.collection-tab.active{background:#3177c3;color:#fff;border-color:#3177c3}
+.collection-grid{display:grid;grid-template-columns:repeat(5,minmax(130px,1fr));gap:12px}
+.collection-card{
+  position:relative;
+  min-height:225px;
+  border:1px solid #d5e2ef;
+  border-radius:15px;
+  background:#fff;
+  padding:9px;
+  display:flex;
+  flex-direction:column;
+  gap:6px;
+  overflow:hidden
+}
+.collection-card.current{border:3px solid #2f7bc6;padding:7px;box-shadow:0 5px 15px rgba(47,123,198,.16)}
+.collection-card.next{border:2px dashed #b28222;background:#fffaf0}
+.collection-card.locked{background:#edf1f5;color:#84919d;align-items:center;justify-content:center;text-align:center}
+.collection-stage{font-size:11px;font-weight:900;color:#5f7489}
+.collection-card.current .collection-stage{color:#2465ad}
+.collection-image{
+  height:135px;
+  border-radius:11px;
+  background:#f7fafc;
+  display:grid;
+  place-items:center;
+  overflow:hidden
+}
+.collection-image img{width:100%;height:100%;object-fit:contain}
+.collection-card.next .collection-image img{filter:brightness(0);opacity:.78}
+.collection-image-empty{font-size:13px;font-weight:900;color:#8a99a7;text-align:center;padding:8px}
+.collection-name{font-size:14px;font-weight:900;color:#22384d;text-align:center;line-height:1.35}
+.collection-condition{font-size:10px;color:#6c8093;text-align:center;font-weight:800}
+.collection-badge{
+  position:absolute;
+  top:8px;
+  right:8px;
+  z-index:2;
+  border-radius:999px;
+  padding:4px 7px;
+  background:#3177c3;
+  color:#fff;
+  font-size:9px;
+  font-weight:900
+}
+.collection-card.next .collection-badge{background:#b47b12}
+.collection-question{font-size:39px;font-weight:900;letter-spacing:.08em;color:#8997a4}
+
+/* ===== Growth celebration shown after completed study ===== */
+.growth-overlay{
+  position:fixed;
+  inset:0;
+  z-index:2200;
+  display:grid;
+  place-items:center;
+  padding:18px;
+  background:rgba(14,27,42,.78);
+  backdrop-filter:blur(5px)
+}
+.growth-card{
+  width:min(560px,96vw);
+  max-height:92vh;
+  overflow:auto;
+  border-radius:25px;
+  padding:24px;
+  background:linear-gradient(180deg,#fff 0%,#f7fbff 100%);
+  border:4px solid #f0bd3c;
+  box-shadow:0 30px 80px rgba(0,0,0,.4);
+  text-align:center;
+  animation:growthPop .38s ease both
+}
+@keyframes growthPop{from{opacity:0;transform:scale(.82) translateY(25px)}to{opacity:1;transform:scale(1) translateY(0)}}
+.growth-kicker{font-size:13px;font-weight:900;color:#a46a00;letter-spacing:.08em;margin-bottom:5px}
+.growth-card h2{margin:0;color:#173653;font-size:clamp(25px,5vw,36px);line-height:1.25}
+.growth-threshold{margin:9px 0 12px;color:#48637b;font-weight:800;font-size:15px}
+.growth-image-frame{
+  height:min(42vh,330px);
+  margin:0 auto 13px;
+  border-radius:18px;
+  background:radial-gradient(circle at center,#fffbe8 0%,#edf7ff 68%,#e6f0f8 100%);
+  border:2px solid #d2e3f2;
+  display:grid;
+  place-items:center;
+  overflow:hidden
+}
+.growth-image-frame img{width:94%;height:94%;object-fit:contain}
+.growth-image-fallback{font-weight:900;color:#718498;padding:15px}
+.growth-message{font-size:18px;font-weight:900;color:#253e55;line-height:1.55;margin:8px 0 16px}
+.growth-ok{
+  width:min(300px,100%);
+  min-height:54px;
+  border:0;
+  border-radius:14px;
+  background:#d73b35;
+  color:#fff;
+  font-size:19px;
+  font-weight:900;
+  cursor:pointer;
+  box-shadow:0 7px 17px rgba(190,42,35,.28)
+}
+
+@media(max-width:900px){
+  .profile-current-section{grid-template-columns:1fr}
+  .profile-visual-box{min-height:250px}
+  .profile-visual-box .evo-canvas{height:230px}
+  .collection-grid{grid-template-columns:repeat(3,minmax(115px,1fr))}
+}
+@media(max-width:767px){
+  .selection-toolbar .profile-open-btn{width:100%;margin-right:0}
+  .profile-modal-body{padding:9px}
+  .profile-current-section{gap:9px;margin-bottom:9px}
+  .profile-details-box,.collection-section{padding:12px}
+  .profile-detail-grid{grid-template-columns:1fr}
+  .collection-grid{grid-template-columns:repeat(2,minmax(105px,1fr));gap:8px}
+  .collection-card{min-height:195px}
+  .collection-image{height:112px}
+  .growth-card{padding:17px}
+  .growth-image-frame{height:min(39vh,280px)}
+}
+
+
+@media(max-width:767px){
+  .back-btn{margin-top:58px}
+}
+
+
+@media(max-width:767px){
+  .question.text-question{padding:8px 10px}
+  .answer.text-answer{padding:8px 10px}
+  .fit-text{line-height:1.2}
+}
+
+
+
+/* ===== Password gate v39 ===== */
+body.auth-locked{overflow:hidden;background:#eef4fb}
+body.auth-locked>.app{display:none!important}
+.auth-gate{
+  position:fixed;inset:0;z-index:5000;display:grid;place-items:center;
+  padding:max(18px,env(safe-area-inset-top)) max(18px,env(safe-area-inset-right))
+          max(18px,env(safe-area-inset-bottom)) max(18px,env(safe-area-inset-left));
+  background:linear-gradient(145deg,#e8f3ff 0%,#f8fbff 48%,#eef8f1 100%);
+}
+.auth-gate.hidden{display:none!important}
+.auth-card{
+  width:min(430px,100%);padding:28px 24px 24px;border:1px solid #cbdced;
+  border-radius:24px;background:#fff;box-shadow:0 22px 60px rgba(30,67,108,.18);text-align:center
+}
+.auth-lock-icon{font-size:47px;line-height:1;margin-bottom:8px}
+.auth-title{margin:0;color:#214c7b;font-size:clamp(25px,6vw,34px);font-weight:900}
+.auth-subtitle{margin:8px 0 20px;color:#63758a;font-size:14px;font-weight:700}
+.auth-input-row{display:flex;gap:8px;align-items:stretch}
+.auth-input{
+  min-width:0;flex:1;height:52px;border:2px solid #b9cee3;border-radius:13px;
+  padding:0 14px;font-size:18px;font-weight:800;letter-spacing:.04em;outline:none
+}
+.auth-input:focus{border-color:#3478c9;box-shadow:0 0 0 4px rgba(52,120,201,.12)}
+.auth-toggle{flex:none;border:0;border-radius:12px;padding:0 14px;background:#eaf0f7;color:#233142;font-weight:900;cursor:pointer}
+.auth-submit{width:100%;min-height:54px;margin-top:12px;border:0;border-radius:14px;background:#3478c9;color:#fff;font-size:18px;font-weight:900;cursor:pointer}
+.auth-submit:disabled,.auth-input:disabled,.auth-toggle:disabled{opacity:.5;cursor:not-allowed}
+.auth-message{min-height:25px;margin:11px 0 0;color:#c73535;font-size:14px;font-weight:900;line-height:1.5}
+.auth-note{margin-top:11px;color:#7b8b9c;font-size:11px;line-height:1.55}
+@media(max-width:420px){
+  .auth-card{padding:23px 16px 20px;border-radius:19px}
+  .auth-input-row{gap:6px}.auth-toggle{padding:0 11px}.auth-input{font-size:16px}
+}
+
+</style>
+</head>
+<body class="auth-locked">
+<div class="auth-gate" id="authGate" aria-modal="true" role="dialog" aria-labelledby="authTitle">
+  <div class="auth-card">
+    <div class="auth-lock-icon" aria-hidden="true">🔒</div>
+    <h1 class="auth-title" id="authTitle">社会クエスト 地理</h1>
+    <p class="auth-subtitle">パスワードを入力してください</p>
+    <div class="auth-input-row">
+      <input class="auth-input" id="authPassword" type="password" autocomplete="current-password" inputmode="text" aria-label="パスワード">
+      <button class="auth-toggle" id="authToggle" type="button" aria-pressed="false">表示</button>
+    </div>
+    <button class="auth-submit" id="authSubmit" type="button">はじめる</button>
+    <p class="auth-message" id="authMessage" aria-live="polite"></p>
+    <p class="auth-note">この端末で一度認証すると、ブラウザのサイトデータを消さない限り、次回から入力は不要です。</p>
+  </div>
+</div>
+<div class="app">
+  <section class="card" id="selectScreen">
+    <div class="profile-board">
+      <div class="profile-title">🐾　社会クエスト 地理　🐾</div>
+      <div class="profile-grid">
+        <section class="record-panel">
+          <h2>通算記録</h2>
+          <div class="record-row"><span>通算挑戦回数</span><strong><b id="totalTries">0</b> 回</strong></div>
+          <div class="record-row"><span>総メダル数</span><strong><b id="medalTotal">0</b> / 537 枚</strong></div>
+          <div class="record-row"><span>通算学習日数</span><strong><b id="studyDays">0</b> 日</strong></div>
+        </section>
+        <section class="character-panel">
+          <div class="speech" id="profileSpeech">あと少しで新しい装備がもらえるよ！</div>
+          <div class="idea-board">
+            <div class="evo-canvas" id="evoCanvas">
+              <img id="magicLayer" class="evo-layer magic-layer" alt="魔法エフェクト">
+              <img id="equipLayer" class="evo-layer equip-layer" alt="イッシー装備">
+              <img id="petLayer" class="evo-layer pet-layer" alt="ペット">
+              <div id="evoFallback" class="idea-fallback">
+                <div class="idea-fallback-title">イッシーの進化画像</div>
+                <div class="idea-fallback-text">imagesフォルダーに進化画像を入れると、ここに表示されます。</div>
+                <div class="idea-fallback-file">isshi_equip_01.png / isshi_magic_02.png / isshi_pet_02.png など</div>
+              </div>
+            </div>
+          </div>
+        </section>
+        <section class="next-panel">
+          <h2>あと少し表示</h2>
+          <div class="next-row"><span>次のレベルまで</span><strong id="nextLevel">あと360回</strong></div>
+          <div class="next-row"><span>次の装備まで</span><strong id="nextEquipment">あと60枚</strong></div>
+          <div class="next-row"><span>ペット成長まで</span><strong id="nextPet">あと3日</strong></div>
+        </section>
+      </div>
+    </div>
+
+    <div class="selection-toolbar">
+      <button class="btn profile-open-btn" id="openProfile">プロフィール</button>
+      <div class="mode-buttons">
+        <label class="mode-pill"><input type="radio" name="mode" value="order" checked> 順番</label>
+        <label class="mode-pill"><input type="radio" name="mode" value="random"> ランダム</label>
+        <button class="btn primary start-toolbar-btn" id="start">この範囲で学習する</button>
+      </div>
+    </div>
+
+    <div class="selection-info" id="selectionInfo">0問・0区分を選択中</div>
+    <div class="tree" id="selectionTree"></div>
+
+  </section>
+
+  <section class="card hidden" id="studyScreen">
+    <div class="study-head">
+      <div class="progress-wrap">
+        <div class="progress-text" id="progressText"></div>
+        <div class="bar"><div id="bar"></div></div>
+      </div>
+    </div>
+    <div class="question" id="question"></div>
+
+    <div class="answer-stage">
+      <div class="answer-placeholder" id="answerPlaceholder"></div>
+      <div class="answer hidden" id="answer"></div>
+    </div>
+
+    <div class="study-actions">
+      <button class="btn warn" id="showAnswer">答えを見る</button>
+      <button class="btn secondary explanation-unavailable" id="showExplanation">解説を見る</button>
+      <button class="btn good" id="known">知ってる！</button>
+      <button class="btn primary" id="next">次の問題へ</button>
+      <button class="btn secondary back-btn" id="back">問題選択画面へ戻る</button>
+    </div>
+  </section>
+</div>
+
+<div class="modal hidden" id="imageModal" role="dialog" aria-modal="true" aria-label="画像の拡大表示">
+  <div class="modal-card">
+    <div class="modal-head"><span id="modalTitle">画像</span><button class="close-modal" id="closeModal">閉じる</button></div>
+    <div class="modal-body" id="modalBody"></div>
+  </div>
+</div>
+
+<div class="modal hidden" id="profileModal" role="dialog" aria-modal="true" aria-label="詳しいプロフィール">
+  <div class="modal-card profile-modal-card">
+    <div class="modal-head">
+      <span>詳しいプロフィール</span>
+      <button class="close-modal" id="closeProfile">閉じる</button>
+    </div>
+    <div class="profile-modal-body">
+      <section class="profile-current-section">
+        <div class="profile-visual-box">
+          <div class="evo-canvas" id="profileEvoCanvas">
+            <img id="profileMagicLayer" class="evo-layer magic-layer" alt="現在の魔法">
+            <img id="profileEquipLayer" class="evo-layer equip-layer" alt="現在の装備">
+            <img id="profilePetLayer" class="evo-layer pet-layer" alt="現在のペット">
+            <div id="profileEvoFallback" class="idea-fallback">進化画像を読み込んでいます。</div>
+          </div>
+        </div>
+        <div class="profile-details-box">
+          <h2>現在のプロフィール</h2>
+          <div class="profile-detail-grid">
+            <div class="profile-detail-item"><span>レベル・挑戦回数</span><strong id="profileLevelText"></strong></div>
+            <div class="profile-detail-item"><span>使える魔法</span><strong id="profileMagicText"></strong></div>
+            <div class="profile-detail-item"><span>装備・総メダル数</span><strong id="profileEquipmentText"></strong></div>
+            <div class="profile-detail-item"><span>ペット・学習日数</span><strong id="profilePetText"></strong></div>
+          </div>
+          <div class="profile-next-box" id="profileNextText"></div>
+        </div>
+      </section>
+      <section class="collection-section">
+        <h2>成長コレクション</h2>
+        <div class="collection-tabs">
+          <button class="collection-tab active" data-collection-tab="magic">魔法</button>
+          <button class="collection-tab" data-collection-tab="equipment">装備</button>
+          <button class="collection-tab" data-collection-tab="pet">ペット</button>
+        </div>
+        <div class="collection-grid" id="collectionGrid"></div>
+      </section>
+    </div>
+  </div>
+</div>
+
+<div class="growth-overlay hidden" id="growthModal" role="dialog" aria-modal="true" aria-label="成長のお知らせ">
+  <div class="growth-card" id="growthCard">
+    <div class="growth-kicker" id="growthKicker">成長しました！</div>
+    <h2 id="growthTitle"></h2>
+    <div class="growth-threshold" id="growthThreshold"></div>
+    <div class="growth-image-frame">
+      <img id="growthImage" alt="新しく獲得した画像">
+      <div class="growth-image-fallback hidden" id="growthImageFallback">画像を読み込めませんでした。</div>
+    </div>
+    <div class="growth-message" id="growthMessage"></div>
+    <button class="growth-ok" id="growthOk">OK</button>
+  </div>
+</div>
+
+<script>
+(function(){
+  'use strict';
+  const PASSWORD='geography2026';
+  const AUTH_KEY='socialQuestGeographyAuthenticatedV1';
+  const FAIL_KEY='socialQuestGeographyAuthFailuresV1';
+  const LOCK_KEY='socialQuestGeographyAuthLockedUntilV1';
+  const MAX_FAILURES=5;
+  const LOCK_MS=30000;
+  let timer=null;
+
+  const gate=document.getElementById('authGate');
+  const input=document.getElementById('authPassword');
+  const submit=document.getElementById('authSubmit');
+  const toggle=document.getElementById('authToggle');
+  const message=document.getElementById('authMessage');
+
+  function storageGet(key){try{return localStorage.getItem(key)}catch(_){return null}}
+  function storageSet(key,value){try{localStorage.setItem(key,value)}catch(_){}}
+  function storageRemove(key){try{localStorage.removeItem(key)}catch(_){}}
+  function unlock(){
+    document.body.classList.remove('auth-locked');
+    gate.classList.add('hidden');
+    storageSet(AUTH_KEY,'true');
+    storageRemove(FAIL_KEY);storageRemove(LOCK_KEY);
+    if(timer){clearInterval(timer);timer=null}
+  }
+  function lockedUntil(){return Number(storageGet(LOCK_KEY)||0)}
+  function setControls(disabled){input.disabled=disabled;submit.disabled=disabled;toggle.disabled=disabled}
+  function updateLock(){
+    const remain=lockedUntil()-Date.now();
+    if(remain<=0){
+      storageRemove(LOCK_KEY);storageRemove(FAIL_KEY);setControls(false);message.textContent='';
+      if(timer){clearInterval(timer);timer=null}
+      input.focus();return;
+    }
+    setControls(true);
+    message.textContent=`5回連続で間違えました。あと${Math.ceil(remain/1000)}秒お待ちください。`;
+  }
+  function startLockCountdown(){
+    updateLock();
+    if(!timer) timer=setInterval(updateLock,250);
+  }
+  function attempt(){
+    if(lockedUntil()>Date.now()){startLockCountdown();return}
+    if(input.value===PASSWORD){unlock();return}
+    const failures=Number(storageGet(FAIL_KEY)||0)+1;
+    input.value='';
+    if(failures>=MAX_FAILURES){
+      storageSet(LOCK_KEY,String(Date.now()+LOCK_MS));storageSet(FAIL_KEY,'0');startLockCountdown();
+    }else{
+      storageSet(FAIL_KEY,String(failures));
+      message.textContent=`パスワードが違います。あと${MAX_FAILURES-failures}回間違えると30秒間入力できません。`;
+      input.focus();
+    }
+  }
+
+  if(storageGet(AUTH_KEY)==='true'){unlock();return}
+  if(lockedUntil()>Date.now()) startLockCountdown(); else setTimeout(()=>input.focus(),0);
+  submit.addEventListener('click',attempt);
+  input.addEventListener('keydown',e=>{if(e.key==='Enter')attempt()});
+  toggle.addEventListener('click',()=>{
+    const show=input.type==='password';input.type=show?'text':'password';
+    toggle.textContent=show?'隠す':'表示';toggle.setAttribute('aria-pressed',String(show));input.focus();
+  });
+})();
+</script>
+<script src="data.js"></script>
+<script>
+'use strict';
+const RAW_DATA = window.SOCIAL_QUEST_DATA || [];
+const $ = id => document.getElementById(id);
+const STORAGE_KEY = 'socialQuestGeographyV1';
+const state = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
+state.known = state.known || {};
+state.medals = state.medals || {};
+state.medalDates = state.medalDates || {};
+state.tries = Number(state.tries || 0);
+state.days = state.days || {};
+
+let pool = [];
+let remaining = [];
+let current = null;
+let files = new Map();
+let currentExplanationSrc = '';
+let currentQuestionSrc = '';
+let showingExplanation = false;
+let currentMode = 'order';
+let explanationCheckToken = 0;
+let sessionStartProgress = null;
+let pendingGrowthEvents = [];
+let growthEventIndex = 0;
+let activeCollectionTab = 'magic';
+
+const MAX_LEVEL=10;
+const TOTAL_MEDALS=537;
+const LEVEL_STEP=360;
+const EQUIPMENT_THRESHOLDS=[60,120,180,240,300,360,420,480,537];
+const PET_THRESHOLDS=[3,6,9,12,15,18,21,24,27];
+const MAGIC_NAMES=['','魔法なし','火の魔法','水の魔法','雷の魔法','風の魔法','氷の魔法','自然の魔法','闇の魔法','聖なる魔法','銀河の魔法'];
+const EQUIPMENT_NAMES=['','木の棒と体操服','銅の剣','ランス','刀','レーザーソード','メカアーム','魔法の杖','装備 第8段階','装備 第9段階','鰹節'];
+const PET_NAMES=['','成長前（ペットなし）','ドラゴンの卵','ひび割れた卵','生まれたてのドラゴン','成長したドラゴン','さらに成長したドラゴン','翼が生えたドラゴン','飛び立つ直前のドラゴン','巨大ドラゴン','人型ドラゴン'];
+function countReached(value,thresholds){return thresholds.filter(x=>value>=x).length;}
+
+function equipmentStageFromMedals(medals){
+  return Math.min(10, 1 + EQUIPMENT_THRESHOLDS.filter(x=>medals>=x).length);
+}
+function magicStageFromTries(tries){
+  return Math.min(10, Math.floor(tries / LEVEL_STEP) + 1);
+}
+function petStageFromDays(days){
+  const steps=[3,6,9,12,15,18,21,24,27];
+  return Math.min(10, 1 + steps.filter(x=>days>=x).length);
+}
+function actualProgressSnapshot(){
+  const tries=Number(state.tries||0);
+  const medals=totalMedals();
+  const days=Object.keys(state.days).length;
+  return {
+    tries,medals,days,
+    magicStage:magicStageFromTries(tries),
+    equipmentStage:equipmentStageFromMedals(medals),
+    petStage:petStageFromDays(days)
+  };
+}
+function magicThreshold(stage){return Math.max(0,(stage-1)*LEVEL_STEP);}
+function equipmentThreshold(stage){return stage<=1?0:EQUIPMENT_THRESHOLDS[stage-2];}
+function petThreshold(stage){return stage<=1?0:PET_THRESHOLDS[stage-2];}
+function magicImage(stage){return stage>=2?`images/isshi_magic_${pad2(stage)}.png`:'';}
+function equipmentImage(stage){return `images/isshi_equip_${pad2(stage)}.png`;}
+function petImage(stage){return stage>=2?`images/isshi_pet_${pad2(stage)}.png`:'';}
+function nextProgressText(progress){
+  const magic=progress.magicStage>=10?'魔法はすべて解放済み':`次の魔法まであと${magicThreshold(progress.magicStage+1)-progress.tries}回`;
+  const equip=progress.equipmentStage>=10?'装備は最終段階':`次の装備まであと${equipmentThreshold(progress.equipmentStage+1)-progress.medals}枚`;
+  const pet=progress.petStage>=10?'ペットは最終形態':`次のペット成長まであと${petThreshold(progress.petStage+1)-progress.days}日`;
+  return `${magic}<br>${equip}<br>${pet}`;
+}
+function buildGrowthEvents(before,after){
+  const events=[];
+  for(let stage=before.magicStage+1;stage<=after.magicStage;stage++){
+    if(stage<2) continue;
+    const threshold=magicThreshold(stage);
+    events.push({
+      type:'magic',stage,
+      kicker:'新しい魔法を習得！',
+      title:MAGIC_NAMES[stage],
+      threshold:`通算挑戦回数が${threshold}回に到達しました！`,
+      message:`新しい魔法「${MAGIC_NAMES[stage]}」を使えるようになりました！`,
+      image:magicImage(stage)
+    });
+  }
+  for(let stage=before.equipmentStage+1;stage<=after.equipmentStage;stage++){
+    if(stage<2) continue;
+    const threshold=equipmentThreshold(stage);
+    events.push({
+      type:'equipment',stage,
+      kicker:'イッシーの装備が変化！',
+      title:EQUIPMENT_NAMES[stage],
+      threshold:`総メダル数が${threshold}枚に到達しました！`,
+      message:`新しい装備「${EQUIPMENT_NAMES[stage]}」をゲットしました！`,
+      image:equipmentImage(stage)
+    });
+  }
+  // ペットの成長通知は、ゲーム起動時に学習日数を加算した直後に表示する。
+  return events;
+}
+function buildPetGrowthEvents(beforeStage,afterStage){
+  const events=[];
+  for(let stage=beforeStage+1;stage<=afterStage;stage++){
+    if(stage<2) continue;
+    const threshold=petThreshold(stage);
+    events.push({
+      type:'pet',stage,
+      kicker:'ペットが成長！',
+      title:PET_NAMES[stage],
+      threshold:`通算学習日数が${threshold}日になりました！`,
+      message:`ペットが「${PET_NAMES[stage]}」に成長しました！`,
+      image:petImage(stage)
+    });
+  }
+  return events;
+}
+
+function registerTodayAndGetPetGrowthEvents(){
+  const beforeDays=Object.keys(state.days).length;
+  const beforeStage=petStageFromDays(beforeDays);
+  const today=localDateISO();
+
+  // その日に初めてゲームを開いた時だけ、通算学習日数を1日増やす。
+  if(!state.days[today]){
+    state.days[today]=1;
+  }
+
+  const afterDays=Object.keys(state.days).length;
+  const afterStage=petStageFromDays(afterDays);
+  return buildPetGrowthEvents(beforeStage,afterStage);
+}
+
+function pad2(n){
+  return String(n).padStart(2,'0');
+}
+function setImageSource(img, src, onVisible){
+  img.style.display='none';
+  img.removeAttribute('src');
+  if(!src){
+    onVisible(false);
+    return;
+  }
+  img.onload=()=>{
+    img.style.display='block';
+    onVisible(true);
+  };
+  img.onerror=()=>{
+    img.style.display='none';
+    img.removeAttribute('src');
+    onVisible(false);
+  };
+  img.src=src;
+}
+
+function getActualDisplayValues(){
+  return {
+    tries: Number(state.tries || 0),
+    medals: totalMedals(),
+    days: Object.keys(state.days).length
+  };
+}
+function getDisplayValues(){
+  return getActualDisplayValues();
+}
+
+function updateProfile(){
+  const values = getDisplayValues();
+  const medals = values.medals;
+  const days = values.days;
+  const tries = values.tries;
+  const level = Math.min(MAX_LEVEL, Math.floor(tries / LEVEL_STEP) + 1);
+
+  $('nextLevel').textContent = level >= MAX_LEVEL
+    ? '最高レベル！'
+    : `あと${level * LEVEL_STEP - tries}回`;
+
+  const nextEquipment = EQUIPMENT_THRESHOLDS.find(threshold => medals < threshold);
+  $('nextEquipment').textContent = medals >= TOTAL_MEDALS
+    ? '最終装備！'
+    : `あと${nextEquipment - medals}枚`;
+
+  const nextPet = PET_THRESHOLDS.find(threshold => days < threshold);
+  $('nextPet').textContent = days >= PET_THRESHOLDS[PET_THRESHOLDS.length-1]
+    ? '最終形態！'
+    : `あと${nextPet - days}日`;
+
+  const penultimateEquipment = EQUIPMENT_THRESHOLDS[EQUIPMENT_THRESHOLDS.length-2];
+  if(medals >= TOTAL_MEDALS){
+    $('profileSpeech').textContent = `全${TOTAL_MEDALS}メダル制覇！`;
+  }else if(medals >= penultimateEquipment){
+    $('profileSpeech').textContent = `あと${TOTAL_MEDALS - medals}枚で全メダル制覇！`;
+  }else{
+    $('profileSpeech').textContent = `あと${nextEquipment - medals}枚で新しい装備がもらえるよ！`;
+  }
+
+  updateEvolutionComposite();
+}
+function updateEvolutionComposite(){
+  const values = getDisplayValues();
+  const medals = values.medals;
+  const days = values.days;
+  const tries = values.tries;
+
+  const equipStage = equipmentStageFromMedals(medals);
+  const magicStage = magicStageFromTries(tries);
+  const petStage = petStageFromDays(days);
+
+  const canvas = $('evoCanvas');
+  const fallback = $('evoFallback');
+  const equipLayer = $('equipLayer');
+  const magicLayer = $('magicLayer');
+  const petLayer = $('petLayer');
+
+  canvas.classList.toggle('pet09-special', petStage === 9);
+  canvas.classList.toggle('pet10-special', petStage === 10);
+  canvas.classList.toggle('equip10-special', equipStage === 10);
+
+  let visibleCount = 0;
+  const markVisible = (shown)=>{
+    if(shown) visibleCount += 1;
+    fallback.style.display = visibleCount > 0 ? 'none' : 'flex';
+  };
+
+  visibleCount = 0;
+  fallback.style.display = 'flex';
+
+  const equipSrc = `images/isshi_equip_${pad2(equipStage)}.png`;
+  const magicSrc = magicStage >= 2 ? `images/isshi_magic_${pad2(magicStage)}.png` : '';
+  const petSrc = petStage >= 2 ? `images/isshi_pet_${pad2(petStage)}.png` : '';
+
+  setImageSource(equipLayer, equipSrc, markVisible);
+  setImageSource(magicLayer, magicSrc, markVisible);
+  setImageSource(petLayer, petSrc, markVisible);
+}
+
+
+function updateProfileModalComposite(progress){
+  const canvas=$('profileEvoCanvas');
+  if(!canvas) return;
+  const fallback=$('profileEvoFallback');
+  const equip=$('profileEquipLayer');
+  const magic=$('profileMagicLayer');
+  const pet=$('profilePetLayer');
+  canvas.classList.toggle('pet09-special',progress.petStage===9);
+  canvas.classList.toggle('pet10-special',progress.petStage===10);
+  canvas.classList.toggle('equip10-special',progress.equipmentStage===10);
+  let visible=0;
+  const shown=(ok)=>{if(ok)visible++;fallback.style.display=visible?'none':'flex';};
+  fallback.style.display='flex';
+  setImageSource(equip,equipmentImage(progress.equipmentStage),shown);
+  setImageSource(magic,magicImage(progress.magicStage),shown);
+  setImageSource(pet,petImage(progress.petStage),shown);
+}
+function renderProfileModal(){
+  const values=getDisplayValues();
+  const p={
+    tries:values.tries,
+    medals:values.medals,
+    days:values.days,
+    magicStage:magicStageFromTries(values.tries),
+    equipmentStage:equipmentStageFromMedals(values.medals),
+    petStage:petStageFromDays(values.days)
+  };
+  $('profileLevelText').textContent=`レベル${p.magicStage}・${p.tries}回`;
+  $('profileMagicText').textContent=`${MAGIC_NAMES[p.magicStage]}（第${p.magicStage}段階）`;
+  $('profileEquipmentText').textContent=`${EQUIPMENT_NAMES[p.equipmentStage]}（第${p.equipmentStage}段階）・${p.medals}枚`;
+  $('profilePetText').textContent=`${PET_NAMES[p.petStage]}（第${p.petStage}段階）・${p.days}日`;
+  $('profileNextText').innerHTML=nextProgressText(p);
+  updateProfileModalComposite(p);
+  renderCollection(activeCollectionTab,p);
+}
+function collectionDefinition(type){
+  if(type==='magic') return {
+    current:p=>p.magicStage,
+    name:stage=>MAGIC_NAMES[stage],
+    image:stage=>magicImage(stage),
+    condition:stage=>stage===1?'初期状態':`${magicThreshold(stage)}回で解放`,
+    empty:'魔法なし'
+  };
+  if(type==='equipment') return {
+    current:p=>p.equipmentStage,
+    name:stage=>EQUIPMENT_NAMES[stage],
+    image:stage=>equipmentImage(stage),
+    condition:stage=>stage===1?'初期装備':`${equipmentThreshold(stage)}枚で解放`,
+    empty:'画像なし'
+  };
+  return {
+    current:p=>p.petStage,
+    name:stage=>PET_NAMES[stage],
+    image:stage=>petImage(stage),
+    condition:stage=>stage===1?'成長前':`${petThreshold(stage)}日で成長`,
+    empty:'ペットなし'
+  };
+}
+function collectionImageMarkup(src,silhouette,emptyText){
+  if(!src) return `<div class="collection-image"><div class="collection-image-empty">${esc(emptyText)}</div></div>`;
+  return `<div class="collection-image"><img ${silhouette?'class="collection-silhouette"':''} src="${esc(src)}" alt="コレクション画像" onerror="this.style.display='none';this.nextElementSibling.style.display='grid'"><div class="collection-image-empty" style="display:none">画像を読み込めません</div></div>`;
+}
+function renderCollection(type,progress=actualProgressSnapshot()){
+  activeCollectionTab=type;
+  document.querySelectorAll('.collection-tab').forEach(btn=>btn.classList.toggle('active',btn.dataset.collectionTab===type));
+  const def=collectionDefinition(type);
+  const current=def.current(progress);
+  const html=[];
+  for(let stage=1;stage<=10;stage++){
+    const unlocked=stage<=current;
+    const isCurrent=stage===current;
+    const isNext=stage===current+1;
+    if(unlocked){
+      html.push(`<article class="collection-card ${isCurrent?'current':''}">
+        ${isCurrent?'<span class="collection-badge">現在</span>':''}
+        <div class="collection-stage">第${stage}段階</div>
+        ${collectionImageMarkup(def.image(stage),false,def.empty)}
+        <div class="collection-name">${esc(def.name(stage))}</div>
+        <div class="collection-condition">${esc(def.condition(stage))}</div>
+      </article>`);
+    }else if(isNext){
+      html.push(`<article class="collection-card next">
+        <span class="collection-badge">次に解放</span>
+        <div class="collection-stage">第${stage}段階</div>
+        ${collectionImageMarkup(def.image(stage),true,'？？？')}
+        <div class="collection-name">？？？</div>
+        <div class="collection-condition">${esc(def.condition(stage))}</div>
+      </article>`);
+    }else{
+      html.push(`<article class="collection-card locked">
+        <div class="collection-stage">第${stage}段階</div>
+        <div class="collection-question">？？？</div>
+        <div class="collection-name">？？？</div>
+      </article>`);
+    }
+  }
+  $('collectionGrid').innerHTML=html.join('');
+}
+function openProfileModal(){
+  renderProfileModal();
+  $('profileModal').classList.remove('hidden');
+}
+function closeProfileModal(){
+  $('profileModal').classList.add('hidden');
+}
+function showGrowthEvents(events){
+  if(!events.length) return;
+  pendingGrowthEvents=events;
+  growthEventIndex=0;
+  $('growthModal').classList.remove('hidden');
+  renderGrowthEvent();
+}
+function renderGrowthEvent(){
+  const event=pendingGrowthEvents[growthEventIndex];
+  if(!event){
+    $('growthModal').classList.add('hidden');
+    pendingGrowthEvents=[];
+    growthEventIndex=0;
+    return;
+  }
+  $('growthKicker').textContent=event.kicker;
+  $('growthTitle').textContent=event.title;
+  $('growthThreshold').textContent=event.threshold;
+  $('growthMessage').textContent=event.message;
+  const img=$('growthImage');
+  const fallback=$('growthImageFallback');
+  fallback.classList.add('hidden');
+  img.style.display='none';
+  img.onload=()=>{img.style.display='block';fallback.classList.add('hidden');};
+  img.onerror=()=>{img.style.display='none';fallback.classList.remove('hidden');};
+  img.src=event.image;
+  const card=$('growthCard');
+  card.style.animation='none';
+  void card.offsetWidth;
+  card.style.animation='growthPop .38s ease both';
+}
+function acknowledgeGrowth(){
+  growthEventIndex++;
+  if(growthEventIndex<pendingGrowthEvents.length){
+    renderGrowthEvent();
+  }else{
+    $('growthModal').classList.add('hidden');
+    pendingGrowthEvents=[];
+    growthEventIndex=0;
+  }
+}
+
+const DATA = RAW_DATA.map(q=>({
+  ...q,
+  quizName:String(q.quizName ?? ''),
+  lessonName:String(q.lessonName ?? ''),
+  category:String(q.category ?? ''),
+  text:String(q.text ?? ''),
+  answer:String(q.answer ?? '')
+}));
+
+function cleanCat(value){ return String(value || '').includes('入試') ? '入試問題' : '確認問題'; }
+function shortCat(value){ return String(value || '').includes('入試') ? '入試' : '確認'; }
+function groupKey(q){ return [q.quizNo, q.lessonOrder, shortCat(q.category)].join('|'); }
+function esc(value){ return String(value ?? '').replace(/[&<>'"]/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[ch])); }
+function save(){ localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); updateStats(); }
+function localDateISO(){
+  const d=new Date();
+  const y=d.getFullYear();
+  const m=String(d.getMonth()+1).padStart(2,'0');
+  const day=String(d.getDate()).padStart(2,'0');
+  return `${y}-${m}-${day}`;
+}
+function dateHtml(iso){
+  if(!iso) return '<span>取得日</span><span>不明</span>';
+  const m=String(iso).match(/^(\d{4})-(\d{2})-(\d{2})$/);
+  if(!m) return '<span>取得日</span><span>不明</span>';
+  return `<span>${Number(m[1])}年</span><span>${Number(m[2])}月${Number(m[3])}日</span>`;
+}
+function medalSlots(count,key){
+  const n = Math.min(3, Number(count || 0));
+  const dates = state.medalDates[key] || [];
+  const arr = ['🥉','🥈','🥇'];
+  return arr.map((icon,i)=>{
+    const earned=n>=i+1;
+    return `<span class="medal-slot ${earned?'':'off'}">${earned?`<span class="medal-icon">${icon}</span><span class="medal-date">${dateHtml(dates[i])}</span>`:''}</span>`;
+  }).join('');
+}
+function migrateExistingMedalDates(){
+  const studyDates=Object.keys(state.days).sort();
+  const inferred=studyDates.length===1 ? studyDates[0] : '';
+  Object.entries(state.medals).forEach(([key,value])=>{
+    const count=Math.min(3,Number(value||0));
+    const dates=Array.isArray(state.medalDates[key]) ? state.medalDates[key] : [];
+    for(let i=0;i<count;i++){
+      if(!dates[i] && inferred) dates[i]=inferred;
+    }
+    state.medalDates[key]=dates;
+  });
+}
+function medalText(count){
+  const n = Math.min(3, Number(count || 0));
+  return `${n >= 1 ? '🥉' : ''}${n >= 2 ? '🥈' : ''}${n >= 3 ? '🥇' : ''}`;
+}
+function totalMedals(){ return Object.values(state.medals).reduce((sum,n)=>sum + Math.min(3,Number(n||0)),0); }
+function updateStats(){
+  const values = getDisplayValues();
+  $('totalTries').textContent = values.tries;
+  $('studyDays').textContent = values.days;
+  $('medalTotal').textContent = values.medals;
+  updateProfile();
+}
+
+function buildGroups(){
+  const quizzes = new Map();
+  DATA.forEach(q => {
+    const quizId = String(q.quizNo);
+    const lessonId = `${q.quizNo}|${q.lessonOrder}`;
+    if(!quizzes.has(quizId)) quizzes.set(quizId,{quizNo:q.quizNo,quizName:q.quizName,lessons:new Map()});
+    const quiz = quizzes.get(quizId);
+    if(!quiz.lessons.has(lessonId)) quiz.lessons.set(lessonId,{lessonId,lessonOrder:q.lessonOrder,lessonName:q.lessonName,categories:new Map()});
+    const lesson = quiz.lessons.get(lessonId);
+    const cat = shortCat(q.category);
+    const key = groupKey(q);
+    if(!lesson.categories.has(cat)) lesson.categories.set(cat,{cat,key,questions:[]});
+    lesson.categories.get(cat).questions.push(q);
+  });
+  return [...quizzes.values()]
+    .sort((a,b)=>Number(a.quizNo)-Number(b.quizNo))
+    .map(quiz=>({...quiz,lessons:[...quiz.lessons.values()].sort((a,b)=>Number(a.lessonOrder)-Number(b.lessonOrder))}));
+}
+const HIERARCHY = buildGroups();
+const GROUPS = new Map();
+HIERARCHY.forEach(quiz=>quiz.lessons.forEach(lesson=>lesson.categories.forEach(group=>GROUPS.set(group.key,group.questions))));
+
+function renderSelectionTree(){
+  const html = HIERARCHY.map((quiz,quizIndex)=>{
+    const lessonHtml = quiz.lessons.map(lesson=>{
+      const catOrder = {'確認':0,'入試':1};
+      const categories = [...lesson.categories.values()].sort((a,b)=>(catOrder[a.cat]??9)-(catOrder[b.cat]??9));
+      const total = categories.reduce((n,g)=>n+g.questions.length,0);
+      const categoryHtml = categories.map(group=>{
+        const isExam = group.cat === '入試';
+        return `<div class="category-grid">
+          <label class="category-main">
+            <input class="tree-check category-check" type="checkbox" data-key="${esc(group.key)}" data-quiz="${esc(quiz.quizNo)}" data-lesson="${esc(lesson.lessonId)}">
+            <span class="cat-badge ${isExam?'exam':''}">${esc(group.cat)}</span>
+            <span class="count">${group.questions.length}問</span>
+          </label>
+          ${medalSlots(state.medals[group.key],group.key)}
+        </div>`;
+      }).join('');
+      return `<div class="lesson-block">
+        <div class="lesson-head">
+          <label class="lesson-title-area">
+            <input class="tree-check lesson-check" type="checkbox" data-lesson="${esc(lesson.lessonId)}" data-quiz="${esc(quiz.quizNo)}">
+            <span>${esc(lesson.lessonOrder)}．${esc(lesson.lessonName)} <small style="color:#718297;font-weight:600">（${total}問）</small></span>
+          </label>
+        </div>
+        <div class="category-list">${categoryHtml}</div>
+      </div>`;
+    }).join('');
+    const quizTotal = quiz.lessons.reduce((sum,l)=>sum+[...l.categories.values()].reduce((n,g)=>n+g.questions.length,0),0);
+    return `<details class="quiz-card" ${quizIndex===0?'open':''}>
+      <summary>
+        <input class="tree-check quiz-check" type="checkbox" data-quiz="${esc(quiz.quizNo)}">
+        <span class="quiz-title"><strong>小テスト${esc(quiz.quizNo)}　${esc(quiz.quizName)}</strong><small>${quiz.lessons.length}授業・${quizTotal}問</small></span>
+      </summary>
+      <div class="lessons">${lessonHtml}</div>
+    </details>`;
+  }).join('');
+  $('selectionTree').innerHTML = html;
+  wireTreeEvents();
+  updateParentChecks();
+  updateSelectionInfo();
+}
+
+function getCategoryChecksByQuiz(quiz){
+  return [...document.querySelectorAll('.category-check')]
+    .filter(box=>box.dataset.quiz===String(quiz));
+}
+function getCategoryChecksByLesson(lesson){
+  return [...document.querySelectorAll('.category-check')]
+    .filter(box=>box.dataset.lesson===String(lesson));
+}
+function getLessonChecksByQuiz(quiz){
+  return [...document.querySelectorAll('.lesson-check')]
+    .filter(box=>box.dataset.quiz===String(quiz));
+}
+function wireTreeEvents(){
+  const tree=$('selectionTree');
+
+  // Remove any previous delegated listeners when the tree is redrawn.
+  if(tree._selectionClickHandler) tree.removeEventListener('click',tree._selectionClickHandler);
+  if(tree._selectionChangeHandler) tree.removeEventListener('change',tree._selectionChangeHandler);
+
+  tree._selectionClickHandler=(event)=>{
+    const target=event.target;
+
+    // A checkbox inside <summary> can toggle the details element on some
+    // mobile browsers. Stop that default interaction but keep the checkbox.
+    if(target.matches('.quiz-check')){
+      event.stopPropagation();
+      return;
+    }
+
+    // Tapping the category or lesson text should toggle its checkbox,
+    // even on browsers with inconsistent label handling.
+    const categoryLabel=target.closest('.category-main');
+    if(categoryLabel && !target.matches('input')){
+      event.preventDefault();
+      const box=categoryLabel.querySelector('.category-check');
+      if(box){
+        box.checked=!box.checked;
+        box.dispatchEvent(new Event('change',{bubbles:true}));
+      }
+      return;
+    }
+
+    const lessonLabel=target.closest('.lesson-title-area');
+    if(lessonLabel && !target.matches('input')){
+      event.preventDefault();
+      const box=lessonLabel.querySelector('.lesson-check');
+      if(box){
+        box.checked=!box.checked;
+        box.dispatchEvent(new Event('change',{bubbles:true}));
+      }
+    }
+  };
+
+  tree._selectionChangeHandler=(event)=>{
+    const box=event.target;
+    if(!(box instanceof HTMLInputElement)) return;
+
+    if(box.matches('.quiz-check')){
+      getCategoryChecksByQuiz(box.dataset.quiz).forEach(item=>item.checked=box.checked);
+      getLessonChecksByQuiz(box.dataset.quiz).forEach(item=>item.checked=box.checked);
+    }else if(box.matches('.lesson-check')){
+      getCategoryChecksByLesson(box.dataset.lesson).forEach(item=>item.checked=box.checked);
+    }else if(!box.matches('.category-check')){
+      return;
+    }
+
+    updateParentChecks();
+    updateSelectionInfo();
+  };
+
+  tree.addEventListener('click',tree._selectionClickHandler);
+  tree.addEventListener('change',tree._selectionChangeHandler);
+}
+function setParentState(parent,children){
+  const allChecked = children.length>0 && children.every(x=>x.checked);
+  parent.indeterminate = false;
+  parent.checked = allChecked;
+}
+function updateParentChecks(){
+  document.querySelectorAll('.lesson-check').forEach(parent=>{
+    setParentState(parent,getCategoryChecksByLesson(parent.dataset.lesson));
+  });
+  document.querySelectorAll('.quiz-check').forEach(parent=>{
+    setParentState(parent,getCategoryChecksByQuiz(parent.dataset.quiz));
+  });
+}
+function selectedGroupKeys(){ return [...document.querySelectorAll('.category-check:checked')].map(x=>x.dataset.key); }
+function selectedQuestions(){ return selectedGroupKeys().flatMap(key=>GROUPS.get(key) || []); }
+function updateSelectionInfo(){
+  const keys = selectedGroupKeys();
+  const count = keys.reduce((sum,key)=>sum+(GROUPS.get(key)?.length||0),0);
+  $('selectionInfo').innerHTML = `<b>${count}問</b>・${keys.length}区分を選択中`;
+  $('start').disabled = count===0;
+}
+
+function startStudy(){
+  pool = selectedQuestions();
+  if(!pool.length){ alert('学習する範囲を選んでください。'); return; }
+  sessionStartProgress=actualProgressSnapshot();
+  currentMode = document.querySelector('input[name="mode"]:checked').value;
+  remaining = pool.filter(q=>!state.known[q.id]);
+  if(currentMode==='random') shuffle(remaining);
+  save();
+  $('selectScreen').classList.add('hidden');
+  $('studyScreen').classList.remove('hidden');
+  showNextQuestion(false);
+}
+function shuffle(array){
+  for(let i=array.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[array[i],array[j]]=[array[j],array[i]];}
+  return array;
+}
+function resolveImage(name){
+  if(!name) return '';
+  return files.get(String(name).toLowerCase()) || `images/${encodeURIComponent(name).replace(/%2F/g,'/')}`;
+}
+function missingHtml(name,label){
+  return `<div class="missing">${esc(name||label)} が見つかりません。imagesフォルダーへ入れるか、画像フォルダーを選択してください。</div>`;
+}
+function imageHtml(src,label,name){
+  return `<img src="${esc(src)}" alt="${esc(label)}" data-zoom-title="${esc(label)}" data-missing-name="${esc(name||label)}">`;
+}
+function problemImageHtml(name,label){
+  if(!name) return `<div class="missing">${esc(label)}の画像名が登録されていません。</div>`;
+  return imageHtml(resolveImage(name),label,name);
+}
+
+function fitTextToContainer(container, textElement, minSize, maxSize){
+  if(!container || !textElement || container.classList.contains('hidden')) return;
+
+  const style = getComputedStyle(container);
+  const availableWidth = Math.max(
+    20,
+    container.clientWidth
+      - parseFloat(style.paddingLeft || 0)
+      - parseFloat(style.paddingRight || 0)
+  );
+  const availableHeight = Math.max(
+    20,
+    container.clientHeight
+      - parseFloat(style.paddingTop || 0)
+      - parseFloat(style.paddingBottom || 0)
+  );
+
+  textElement.style.width = `${availableWidth}px`;
+
+  let low = minSize;
+  let high = maxSize;
+  let best = minSize;
+
+  for(let i=0;i<12;i++){
+    const mid = (low + high) / 2;
+    textElement.style.fontSize = `${mid}px`;
+
+    const fits =
+      textElement.scrollWidth <= availableWidth + 1 &&
+      textElement.scrollHeight <= availableHeight + 1;
+
+    if(fits){
+      best = mid;
+      low = mid;
+    }else{
+      high = mid;
+    }
+  }
+
+  textElement.style.fontSize = `${Math.floor(best)}px`;
+}
+
+function fitQuestionText(){
+  const element = $('questionTextFit');
+  if(!element) return;
+  const maxSize = window.innerWidth <= 767 ? 44 : 68;
+  const minSize = window.innerWidth <= 767 ? 20 : 24;
+  fitTextToContainer($('question'), element, minSize, maxSize);
+}
+
+function fitAnswerText(){
+  const answerBox = $('answer');
+  const element = $('answerTextFit');
+  if(!element || answerBox.classList.contains('hidden')) return;
+  const maxSize = window.innerWidth <= 767 ? 48 : 82;
+  const minSize = window.innerWidth <= 767 ? 20 : 24;
+  fitTextToContainer(answerBox, element, minSize, maxSize);
+}
+
+function scheduleTextFit(){
+  requestAnimationFrame(()=>{
+    fitQuestionText();
+    fitAnswerText();
+  });
+}
+
+function renderQuestionArea(){
+  if(!current) return;
+  const questionBox=$('question');
+  questionBox.classList.remove('text-question');
+
+  if(showingExplanation && currentExplanationSrc){
+    questionBox.innerHTML = imageHtml(currentExplanationSrc,'解説',current.explanation);
+  }else if(current.type==='画像'){
+    questionBox.innerHTML = problemImageHtml(current.image,'問題');
+  }else{
+    questionBox.classList.add('text-question');
+    questionBox.innerHTML = `<div class="fit-text" id="questionTextFit">${esc(current.text)}</div>`;
+  }
+
+  attachQuestionImageHandlers();
+  scheduleTextFit();
+}
+function showNextQuestion(countAsTry){
+  if(countAsTry){ state.tries += 1; }
+  if(current && !state.known[current.id]) remaining.push(current);
+  if(currentMode==='random' && remaining.length>1 && countAsTry){
+    const last=remaining.pop();
+    const at=Math.floor(Math.random()*(remaining.length+1));
+    remaining.splice(at,0,last);
+  }
+  if(allKnown()){
+    save(); updateProgress(); return;
+  }
+  if(!remaining.length) remaining = pool.filter(q=>!state.known[q.id]);
+  current = remaining.shift();
+  resetResponsePanels();
+  $('answer').classList.add('text-answer');
+  $('answer').innerHTML = `<div class="fit-text" id="answerTextFit">${esc(current.answer || '答えが登録されていません。')}</div>`;
+  $('known').disabled = !!state.known[current.id];
+  $('known').classList.toggle('known-done',!!state.known[current.id]);
+  $('known').textContent = state.known[current.id] ? '知ってる！登録済み' : '知ってる！';
+  prepareExplanationButton();
+  renderQuestionArea();
+  save(); updateProgress();
+}
+function resetResponsePanels(){
+  $('answer').classList.add('hidden');
+  $('answerPlaceholder').classList.remove('hidden');
+  $('showAnswer').textContent='答えを見る';
+  $('showExplanation').textContent='解説を見る';
+  showingExplanation = false;
+}
+function showAnswer(){
+  const willShow=$('answer').classList.contains('hidden');
+  $('answer').classList.toggle('hidden',!willShow);
+  $('answerPlaceholder').classList.toggle('hidden',willShow);
+  $('showAnswer').textContent=willShow?'答えを隠す':'答えを見る';
+  if(willShow) scheduleTextFit();
+}
+function prepareExplanationButton(){
+  const btn=$('showExplanation');
+  btn.classList.add('explanation-unavailable');
+  currentExplanationSrc='';
+  const name=current?.explanation;
+  if(!name) return;
+  const token=++explanationCheckToken;
+  const mapped=files.get(String(name).toLowerCase());
+  if(mapped){ currentExplanationSrc=mapped; btn.classList.remove('explanation-unavailable'); return; }
+  const src=resolveImage(name);
+  const tester=new Image();
+  tester.onload=()=>{
+    if(token===explanationCheckToken && current?.explanation===name){currentExplanationSrc=src;btn.classList.remove('explanation-unavailable');}
+  };
+  tester.onerror=()=>{};
+  tester.src=src;
+}
+function showExplanation(){
+  if(!currentExplanationSrc) return;
+  showingExplanation = !showingExplanation;
+  $('showExplanation').textContent = showingExplanation ? '問題に戻る' : '解説を見る';
+  renderQuestionArea();
+}
+function markKnown(){
+  if(!current) return;
+  state.known[current.id]=1;
+  $('known').disabled=true;
+  $('known').classList.add('known-done');
+  $('known').textContent='知ってる！登録済み';
+  save(); updateProgress();
+}
+function allKnown(){ return pool.length>0 && pool.every(q=>state.known[q.id]); }
+function updateProgress(){
+  const known=pool.filter(q=>state.known[q.id]).length;
+  const pct=pool.length?Math.round(known/pool.length*100):0;
+  $('progressText').textContent=`進捗 ${known}問 / ${pool.length}問　${pct}%`;
+  $('bar').style.width=pct+'%';
+  const complete=allKnown();
+  $('back').classList.toggle('back-complete',complete);
+  $('next').disabled=complete;
+}
+function awardSelectedMedals(){
+  const today=localDateISO();
+
+  [...new Set(pool.map(groupKey))].forEach(key=>{
+    const before=Math.min(3,Number(state.medals[key]||0));
+    const dates=Array.isArray(state.medalDates[key]) ? state.medalDates[key] : [];
+
+    if(before<3){
+      const after=before+1;
+      state.medals[key]=after;
+      dates[after-1]=today;
+    }else{
+      // 金メダル獲得後にもう一度全問達成した場合は、
+      // メダル数を増やさず、金メダルの取得日だけを最新日に更新する。
+      state.medals[key]=3;
+      dates[2]=today;
+    }
+
+    state.medalDates[key]=dates;
+  });
+}
+function clearPoolKnown(){ pool.forEach(q=>delete state.known[q.id]); }
+function returnToSelection(){
+  const completed=allKnown();
+  const before=sessionStartProgress || actualProgressSnapshot();
+  if(completed) awardSelectedMedals();
+  const after=actualProgressSnapshot();
+  const growthEvents=completed ? buildGrowthEvents(before,after) : [];
+
+  clearPoolKnown();
+  current=null;pool=[];remaining=[];currentExplanationSrc='';showingExplanation=false;explanationCheckToken++;
+  sessionStartProgress=null;
+  save();
+  $('studyScreen').classList.add('hidden');
+  $('selectScreen').classList.remove('hidden');
+  renderSelectionTree();
+
+  if(growthEvents.length){
+    window.setTimeout(()=>showGrowthEvents(growthEvents),80);
+  }
+}
+function openModal(src,title){
+  if(!src) return;
+  $('modalTitle').textContent=title||'画像';
+  $('modalBody').innerHTML=`<img src="${esc(src)}" alt="${esc(title||'画像')}">`;
+  $('imageModal').classList.remove('hidden');
+}
+function closeModal(){ $('imageModal').classList.add('hidden');$('modalBody').innerHTML=''; }
+function attachQuestionImageHandlers(){
+  document.querySelectorAll('#question img[data-zoom-title]').forEach(img=>{
+    img.onclick=()=>openModal(img.src,img.dataset.zoomTitle);
+    img.onerror=()=>{
+      const name=img.dataset.missingName || img.alt || '画像';
+      const wrapper=document.createElement('div');
+      wrapper.className='missing';
+      wrapper.textContent=`${name} が見つかりません。imagesフォルダーへ入れるか、画像フォルダーを選択してください。`;
+      img.replaceWith(wrapper);
+    };
+  });
+}
+
+$('start').onclick=startStudy;
+$('showAnswer').onclick=showAnswer;
+$('showExplanation').onclick=showExplanation;
+$('known').onclick=markKnown;
+$('next').onclick=()=>showNextQuestion(true);
+$('back').onclick=returnToSelection;
+$('closeModal').onclick=closeModal;
+$('openProfile').onclick=openProfileModal;
+$('closeProfile').onclick=closeProfileModal;
+$('profileModal').onclick=e=>{if(e.target===$('profileModal'))closeProfileModal();};
+
+document.querySelectorAll('.collection-tab').forEach(btn=>{
+  btn.onclick=()=>renderCollection(btn.dataset.collectionTab);
+});
+$('growthOk').onclick=acknowledgeGrowth;
+$('imageModal').onclick=e=>{if(e.target===$('imageModal'))closeModal();};
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeModal();closeProfileModal();}});
+migrateExistingMedalDates();
+const startupPetGrowthEvents=registerTodayAndGetPetGrowthEvents();
+save();
+
+document.addEventListener('pointerup',event=>{
+  const box=event.target.closest?.('.tree-check');
+  if(!box) return;
+  if(box.classList.contains('quiz-check')) event.stopPropagation();
+},{capture:true});
+
+renderSelectionTree();
+updateStats();
+
+if(startupPetGrowthEvents.length){
+  window.setTimeout(()=>showGrowthEvents(startupPetGrowthEvents),120);
+}
+</script>
+</body>
+</html>
