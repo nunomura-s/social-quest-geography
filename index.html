@@ -7,7 +7,7 @@
 <meta name="robots" content="noindex,nofollow,noarchive,noimageindex">
 <meta name="googlebot" content="noindex,nofollow,noarchive,noimageindex">
 <meta name="bingbot" content="noindex,nofollow,noarchive,noimageindex">
-<!-- version 39: password gate and search-engine exclusion -->
+<!-- version 40: geography growth names and final-stage messages -->
 <style>
 :root{
   --ink:#233142;--muted:#63758a;--blue:#3478c9;--blue2:#eaf4ff;
@@ -1064,8 +1064,8 @@ const LEVEL_STEP=360;
 const EQUIPMENT_THRESHOLDS=[60,120,180,240,300,360,420,480,537];
 const PET_THRESHOLDS=[3,6,9,12,15,18,21,24,27];
 const MAGIC_NAMES=['','魔法なし','火の魔法','水の魔法','雷の魔法','風の魔法','氷の魔法','自然の魔法','闇の魔法','聖なる魔法','銀河の魔法'];
-const EQUIPMENT_NAMES=['','木の棒と体操服','銅の剣','ランス','刀','レーザーソード','メカアーム','魔法の杖','装備 第8段階','装備 第9段階','鰹節'];
-const PET_NAMES=['','成長前（ペットなし）','ドラゴンの卵','ひび割れた卵','生まれたてのドラゴン','成長したドラゴン','さらに成長したドラゴン','翼が生えたドラゴン','飛び立つ直前のドラゴン','巨大ドラゴン','人型ドラゴン'];
+const EQUIPMENT_NAMES=['','木の棒と体操服','銅の剣','鉄のよろい','聖騎士のよろい','武者よろい','魔法使いのローブ','宇宙服','サイバーアーマー','ねずみの着ぐるみ','天空の黄金よろい'];
+const PET_NAMES=['','ペットなし','謎の卵','ひび割れた卵','赤ちゃんドラゴン','子どもドラゴン','ファイアードラゴン','アイスドラゴン','パープルドラゴン','グレイトドラゴン','ナイトドラゴン'];
 function countReached(value,thresholds){return thresholds.filter(x=>value>=x).length;}
 
 function equipmentStageFromMedals(medals){
@@ -1106,24 +1106,30 @@ function buildGrowthEvents(before,after){
   for(let stage=before.magicStage+1;stage<=after.magicStage;stage++){
     if(stage<2) continue;
     const threshold=magicThreshold(stage);
+    const isFinal=stage===10;
     events.push({
       type:'magic',stage,
-      kicker:'新しい魔法を習得！',
+      kicker:isFinal?'🌟 究極魔法を習得！ 🌟':'新しい魔法を習得！',
       title:MAGIC_NAMES[stage],
       threshold:`通算挑戦回数が${threshold}回に到達しました！`,
-      message:`新しい魔法「${MAGIC_NAMES[stage]}」を使えるようになりました！`,
+      message:isFinal
+        ?`究極魔法「${MAGIC_NAMES[stage]}」を習得した！`
+        :`新しい魔法「${MAGIC_NAMES[stage]}」を使えるようになりました！`,
       image:magicImage(stage)
     });
   }
   for(let stage=before.equipmentStage+1;stage<=after.equipmentStage;stage++){
     if(stage<2) continue;
     const threshold=equipmentThreshold(stage);
+    const isFinal=stage===10;
     events.push({
       type:'equipment',stage,
-      kicker:'イッシーの装備が変化！',
+      kicker:isFinal?'🛡️ 最強装備を獲得！ 🛡️':'イッシーの装備が変化！',
       title:EQUIPMENT_NAMES[stage],
       threshold:`総メダル数が${threshold}枚に到達しました！`,
-      message:`新しい装備「${EQUIPMENT_NAMES[stage]}」をゲットしました！`,
+      message:isFinal
+        ?`最強装備「${EQUIPMENT_NAMES[stage]}」を手に入れた！`
+        :`新しい装備「${EQUIPMENT_NAMES[stage]}」をゲットしました！`,
       image:equipmentImage(stage)
     });
   }
@@ -1132,15 +1138,27 @@ function buildGrowthEvents(before,after){
 }
 function buildPetGrowthEvents(beforeStage,afterStage){
   const events=[];
+  const PET_GROWTH_MESSAGES={
+    2:{kicker:'新しい仲間を獲得！',message:'謎の卵をゲットした！'},
+    3:{kicker:'ペットが成長！',message:'あと少しで生まれそう！'},
+    4:{kicker:'ペットが成長！',message:'ドラゴンが生まれた！'},
+    5:{kicker:'ペットが成長！',message:'子どもドラゴンに成長した！'},
+    6:{kicker:'ペットが進化！',message:'ファイアードラゴンに進化した！'},
+    7:{kicker:'ペットが進化！',message:'アイスドラゴンに進化した！'},
+    8:{kicker:'ペットが進化！',message:'パープルドラゴンに進化した！'},
+    9:{kicker:'ペットが進化！',message:'グレイトドラゴンに進化した！'},
+    10:{kicker:'🐉 ペットが最終進化！ 🐉',message:'ナイトドラゴンへ最終進化した！'}
+  };
   for(let stage=beforeStage+1;stage<=afterStage;stage++){
     if(stage<2) continue;
     const threshold=petThreshold(stage);
+    const notice=PET_GROWTH_MESSAGES[stage];
     events.push({
       type:'pet',stage,
-      kicker:'ペットが成長！',
+      kicker:notice.kicker,
       title:PET_NAMES[stage],
       threshold:`通算学習日数が${threshold}日になりました！`,
-      message:`ペットが「${PET_NAMES[stage]}」に成長しました！`,
+      message:notice.message,
       image:petImage(stage)
     });
   }
