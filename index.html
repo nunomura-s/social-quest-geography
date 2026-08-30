@@ -7,7 +7,7 @@
 <meta name="robots" content="noindex,nofollow,noarchive,noimageindex">
 <meta name="googlebot" content="noindex,nofollow,noarchive,noimageindex">
 <meta name="bingbot" content="noindex,nofollow,noarchive,noimageindex">
-<!-- version 40: geography growth names and final-stage messages -->
+<!-- version 43: disable weak-study button when no weak questions -->
 <style>
 :root{
   --ink:#233142;--muted:#63758a;--blue:#3478c9;--blue2:#eaf4ff;
@@ -177,6 +177,8 @@ button,input,select,textarea,summary{font:inherit} button{touch-action:manipulat
   color:#6c8094;
 }
 .start-toolbar-btn{padding:10px 17px;white-space:nowrap}
+.weak-study-btn{background:linear-gradient(180deg,#8b67d3,#6844b5);color:#fff;box-shadow:0 4px 10px rgba(104,68,181,.18);white-space:nowrap}
+.weak-study-btn:hover{box-shadow:0 6px 14px rgba(104,68,181,.25)}
 
 
 .selection-toolbar{display:flex;align-items:center;justify-content:flex-end;gap:12px;flex-wrap:wrap;margin:14px 0}
@@ -412,7 +414,7 @@ button,.mode-pill{min-height:44px}
   }
   .mode-buttons{
     display:grid;
-    grid-template-columns:1fr 1fr;
+    grid-template-columns:repeat(3,minmax(0,1fr));
     gap:6px;
     width:100%;
   }
@@ -542,6 +544,8 @@ button,.mode-pill{min-height:44px}
   .category-grid{padding:6px}
   .medal-date{font-size:6.5px}
   .study-actions .btn{font-size:12px}
+  .weak-study-btn{font-size:11px;padding:7px 4px}
+  .mode-pill{font-size:12px;padding:7px 3px}
 }
 
 @media(orientation:landscape) and (max-height:600px) and (max-width:1000px){
@@ -868,6 +872,7 @@ body.auth-locked>.app{display:none!important}
     <div class="selection-toolbar">
       <button class="btn profile-open-btn" id="openProfile">プロフィール</button>
       <div class="mode-buttons">
+        <button class="btn weak-study-btn" id="weakStudy" type="button">苦手問題10問</button>
         <label class="mode-pill"><input type="radio" name="mode" value="order" checked> 順番</label>
         <label class="mode-pill"><input type="radio" name="mode" value="random"> ランダム</label>
         <button class="btn primary start-toolbar-btn" id="start">この範囲で学習する</button>
@@ -1043,6 +1048,8 @@ state.medals = state.medals || {};
 state.medalDates = state.medalDates || {};
 state.tries = Number(state.tries || 0);
 state.days = state.days || {};
+// 苦手問題の記録：問題IDごとに「知ってる！を押さずに次へ進んだ回数」を保存
+state.weak = state.weak || {};
 
 let pool = [];
 let remaining = [];
@@ -1444,7 +1451,7 @@ function cleanCat(value){ return String(value || '').includes('入試') ? '入�
 function shortCat(value){ return String(value || '').includes('入試') ? '入試' : '確認'; }
 function groupKey(q){ return [q.quizNo, q.lessonOrder, shortCat(q.category)].join('|'); }
 function esc(value){ return String(value ?? '').replace(/[&<>'"]/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[ch])); }
-function save(){ localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); updateStats(); }
+function save(){ localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); updateStats(); updateWeakStudyButton(); }
 function localDateISO(){
   const d=new Date();
   const y=d.getFullYear();
@@ -1663,6 +1670,39 @@ function startStudy(){
   $('studyScreen').classList.remove('hidden');
   showNextQuestion(false);
 }
+
+// ===== 苦手問題10問 =====
+// 通常学習で「知ってる！」を押さずに「次の問題へ」を押した回数が多い順に、最大10問を選ぶ。
+function getWeakQuestions(limit=10){
+  return DATA
+    .map((q,index)=>({q,index,score:Number(state.weak[q.id]||0)}))
+    .filter(item=>item.score>0)
+    .sort((a,b)=>b.score-a.score || a.index-b.index)
+    .slice(0,limit)
+    .map(item=>item.q);
+}
+function updateWeakStudyButton(){
+  const btn=$('weakStudy');
+  if(!btn) return;
+  const hasWeak=DATA.some(q=>Number(state.weak[q.id]||0)>0);
+  btn.disabled=!hasWeak;
+  btn.setAttribute('aria-disabled',String(!hasWeak));
+}
+function startWeakStudy(){
+  pool = getWeakQuestions(10);
+  if(!pool.length) return;
+  sessionStartProgress=actualProgressSnapshot();
+  currentMode='weak';
+
+  // 苦手10問は独立した復習セッションとして始める。
+  // 「知ってる！」状態はこのセッション内だけで使い、終了時に従来どおり消去する。
+  pool.forEach(q=>delete state.known[q.id]);
+  remaining=pool.slice();
+  save();
+  $('selectScreen').classList.add('hidden');
+  $('studyScreen').classList.remove('hidden');
+  showNextQuestion(false);
+}
 function shuffle(array){
   for(let i=array.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[array[i],array[j]]=[array[j],array[i]];}
   return array;
@@ -1766,7 +1806,14 @@ function renderQuestionArea(){
   scheduleTextFit();
 }
 function showNextQuestion(countAsTry){
-  if(countAsTry){ state.tries += 1; }
+  if(countAsTry){
+    state.tries += 1;
+    if(current && currentMode!=='weak' && !state.known[current.id]){
+      // 通常学習だけ：知ってる！を押さずに次へ進んだとき、苦手度+1。
+      // 苦手10問モードでは苦手度を増やさず、知ってる！になるまで再出題する。
+      state.weak[current.id]=Number(state.weak[current.id]||0)+1;
+    }
+  }
   if(current && !state.known[current.id]) remaining.push(current);
   if(currentMode==='random' && remaining.length>1 && countAsTry){
     const last=remaining.pop();
@@ -1828,6 +1875,10 @@ function showExplanation(){
 function markKnown(){
   if(!current) return;
   state.known[current.id]=1;
+  if(currentMode==='weak'){
+    // 苦手10問では「知ってる！」を押した問題だけ、その場で苦手BOXから外す。
+    delete state.weak[current.id];
+  }
   $('known').disabled=true;
   $('known').classList.add('known-done');
   $('known').textContent='知ってる！登録済み';
@@ -1867,8 +1918,10 @@ function awardSelectedMedals(){
 function clearPoolKnown(){ pool.forEach(q=>delete state.known[q.id]); }
 function returnToSelection(){
   const completed=allKnown();
+  const isWeakSession=currentMode==='weak';
   const before=sessionStartProgress || actualProgressSnapshot();
-  if(completed) awardSelectedMedals();
+  // 苦手問題10問は複数の単元をまたぐ復習なので、メダル獲得の対象にはしない。
+  if(completed && !isWeakSession) awardSelectedMedals();
   const after=actualProgressSnapshot();
   const growthEvents=completed ? buildGrowthEvents(before,after) : [];
 
@@ -1905,6 +1958,7 @@ function attachQuestionImageHandlers(){
 }
 
 $('start').onclick=startStudy;
+$('weakStudy').onclick=startWeakStudy;
 $('showAnswer').onclick=showAnswer;
 $('showExplanation').onclick=showExplanation;
 $('known').onclick=markKnown;
