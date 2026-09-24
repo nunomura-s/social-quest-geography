@@ -1,0 +1,2 @@
+// 直接開いた分野ページも、新トップの共通入口で一度だけ認証する。
+(()=>{let allowed=false;try{allowed=localStorage.getItem('socialQuestUnifiedAuthenticatedV1')==='true';}catch{}if(!allowed){document.documentElement.style.visibility='hidden';const subject=location.pathname.includes('/history/')?'history':'geography';location.replace('../index.html?return='+encodeURIComponent(subject+'/index.html'+location.search+location.hash));}})();

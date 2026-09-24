@@ -1,0 +1,19 @@
+/* 元の地理版の青・白・金を基準にしたトップ画面 */
+:root{--ink:#233142;--muted:#63758a;--green:#3478c9;--paper:#f4f7fb;--line:#dbe4ef;--gold:#e3a72f}
+body{font-family:"BIZ UDPGothic","BIZ UDゴシック","Yu Gothic UI","Meiryo",sans-serif;background:linear-gradient(#e4f2ff 0,#f4f7fb 620px)}
+.preview{background:#eaf4ff;color:#315b87;border-color:#b9d2ea}.brand{color:#2465ad}.brand-icon{color:#e3a72f}
+.hero{background:radial-gradient(ellipse at 75% 35%,#fff5ce 0,transparent 60%),linear-gradient(180deg,#eef9ff,#fffdf2);border:2px solid #286fb8;box-shadow:0 6px 18px #245b9114;border-radius:18px}
+.level-tag{background:linear-gradient(#397bc7,#2465ad)}.speech{border:1px solid #b9d2ea;box-shadow:0 3px 0 #dbe8f6}.progress{background:#dbe8f6}.progress i{background:linear-gradient(90deg,#3478c9,#63ade9)}.growth p{color:#63758a}
+.next{border:2px solid #d59d23;background:#fffdf5}.hero h1{color:#245b91}.reviews,.learn{background:#fff;border:1px solid #dbe4ef;border-radius:20px;padding:22px;box-shadow:0 8px 24px #20416912}
+.section-heading{border-bottom:2px solid #eaf4ff;padding-bottom:12px}.section-heading h2{color:#2465ad}.section-icon{color:#3478c9}.empty-review{border-color:#cfe2f8;background:#eef6ff;color:#315b87}
+.subject{border-color:#b9d2ea;background:linear-gradient(#fff,#f2f8ff)}.subject strong{color:#2465ad}.subject b{color:#3478c9}.history{border-color:#ecd59d;background:#fffdf5}.history strong{color:#946411}.civics{background:#f0f2f5}.civics strong{color:#778596}
+.extra{background:#f8fbff;border-color:#cfe2f8}.winter{background:#f0f2f5}.collection-banner{border:2px solid #d59d23;background:linear-gradient(#fff9e7,#fff3cf)}.collection-banner:hover{background:#fff0bb}.collection-banner strong,.collection-total{color:#946411}.collection-banner small{color:#756443}.book-icon{color:#bf8b1f}
+.character-card.current{background:#eef6ff;border-color:#286fb8}.collection-heading>strong{background:#eaf4ff}.controls button{background:#3478c9}.primary{background:#3478c9}
+@media(max-width:760px){.reviews,.learn{padding:17px 13px}.hero{border-radius:18px}}
+@media(max-width:380px){
+  .collection-banner{display:grid;grid-template-columns:28px minmax(0,1fr) 16px;gap:8px 10px;padding:18px 14px}
+  .collection-banner .book-icon{font-size:28px}
+  .collection-banner strong{font-size:18px;white-space:nowrap}
+  .collection-banner .collection-total{grid-column:2;margin-left:0;white-space:nowrap}
+  .collection-banner>b{grid-column:3;grid-row:1}
+}

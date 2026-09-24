@@ -1,0 +1,18 @@
+/* 分野付きIDで苦手記録と固定セットを管理。旧版の保存値は変更しない。 */
+const QuestWeak=(()=>{
+ const key='socialQuestReleaseWeakV1',demoKey='socialQuestWeakDemoV1';
+ const empty=()=>({version:1,items:{},events:[],session:null});
+ function read(demo=false){const raw=(demo?sessionStorage:localStorage).getItem(demo?demoKey:key),s=raw?JSON.parse(raw):empty();if(s.version!==1||!s.items||typeof s.items!=='object'||!Array.isArray(s.events))throw Error('苦手記録の形式を確認できません');for(const [id,q] of Object.entries(s.items)){if(!['geo','hist'].includes(q.subject)||id!==q.subject+':'+q.id||!Number.isInteger(q.count)||q.count<0)throw Error('苦手記録を確認できません');}if(s.session&&(!Array.isArray(s.session.queue)||!s.session.queue.length||!Number.isInteger(s.session.index)||s.session.index<0||s.session.index>s.session.queue.length||s.session.queue.some(k=>!s.items[k])))throw Error('途中の記録を確認できません');return s;}
+ async function change(demo,fn){const run=()=>{const s=read(demo),result=fn(s);(demo?sessionStorage:localStorage).setItem(demo?demoKey:key,JSON.stringify(s));return result;};return typeof navigator!=='undefined'&&navigator.locks?navigator.locks.request(key+(demo?':demo':''),run):run();}
+ function identity(q){return (q.subject==='hist'?'hist':'geo')+':'+q.id;}
+ function record(q,result,eventId){return change(false,s=>{if(s.events.some(e=>e.id===eventId))return;const id=identity(q),time=Date.now();s.events.push({id:eventId,question:id,result,time});if(result==='again'){const old=s.items[id];s.items[id]={id:q.id,subject:q.subject==='hist'?'hist':'geo',name:q.lessonName,category:q.category,count:(old?.count||0)+1,last:time};}});}
+ function candidates(s){return Object.keys(s.items).filter(k=>s.items[k].count>0).sort((a,b)=>s.items[b].count-s.items[a].count||s.items[b].last-s.items[a].last||a.localeCompare(b));}
+ function status(demo=false){const s=read(demo);return {count:candidates(s).length,session:normalize(s.session)};}
+ function start(demo=false){return change(demo,s=>{if(s.session&&!s.session.completed)return s.session;const queue=candidates(s).slice(0,10);if(!queue.length)return null;s.session={id:crypto.randomUUID(),queue,index:0,baseline:Object.fromEntries(queue.map(k=>[k,s.items[k].count])),completed:null};return s.session;});}
+ function normalize(se){if(!se)return se;if(!se.known)se.known=Object.fromEntries(se.queue.slice(0,se.index).map(k=>[k,true]));if(se.index>=se.queue.length)se.index=se.queue.length-1;se.turn=se.turn||0;return se;}
+ function session(demo=false){return normalize(read(demo).session);}
+ function answer(sessionId,turn,result,demo=false){return change(demo,s=>{const se=normalize(s.session);if(!se||se.id!==sessionId)throw Error('別のセットに切り替わりました。トップから開き直してください。');if(se.completed||turn!==se.turn)return se;const id=se.queue[se.index];s.events.push({id:se.id+':'+se.turn,question:id,result,time:Date.now(),mode:'weak'});se.turn++;if(result==='known')se.known[id]=true;if(se.queue.every(k=>se.known[k])){for(const k of se.queue)s.items[k].count=Math.max(0,s.items[k].count-se.baseline[k]);se.completed=new Date().toISOString();}else if(result!=='known'){for(let n=1;n<=se.queue.length;n++){const next=(se.index+n)%se.queue.length;if(!se.known[se.queue[next]]){se.index=next;break;}}}return se;});}
+ function seedDemo(){const s=empty();for(const [subject,id] of [['geo','Q0024'],['hist','Q0001']])s.items[subject+':'+id]={subject,id,count:1,last:0};sessionStorage.setItem(demoKey,JSON.stringify(s));return start(true);}
+ function route(se,demo=false,prefix=''){const k=se.queue[Math.min(se.index,se.queue.length-1)];return prefix+(k.startsWith('hist:')?'history':'geography')+'/index.html?weak='+encodeURIComponent(se.id)+(demo?'&sampleWeak=1':'');}
+ return {read,identity,record,status,start,answer,seedDemo,route,session};
+})();
