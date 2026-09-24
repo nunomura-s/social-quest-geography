@@ -1,0 +1,9 @@
+#quest-growth-notice{box-sizing:border-box;width:min(90vw,480px);max-height:90dvh;overflow:auto;padding:28px;border:2px solid #d6a22b;border-radius:24px;background:#fffef8;color:#243449;text-align:center;box-shadow:0 12px 60px #1234;font-family:inherit}
+#quest-growth-notice::backdrop{background:rgba(20,40,65,.5)}
+#quest-growth-notice h2{font-size:26px;color:#2465ad;margin:0 0 14px}
+#quest-growth-notice h3{font-size:20px;margin:8px 0}
+#quest-growth-notice img{display:block;max-width:100%;width:auto;height: min(32vh,240px);object-fit:contain;margin:12px auto}
+#quest-growth-notice [hidden]{display:none!important}
+#quest-growth-notice p{font-size:17px;line-height:1.7;margin:12px 0}
+#quest-growth-notice button{border:0;border-radius:12px;background:#3177c9;color:white;font:700 18px inherit;font-size:18px;padding:12px 48px;cursor:pointer}
+#quest-growth-notice button:focus-visible{outline:3px solid #202c45;outline-offset:4px}
