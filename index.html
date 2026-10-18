@@ -1,5 +1,60 @@
 <!doctype html>
-<html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>社会クエスト｜いっしーと学ぶ冒険</title><link rel="stylesheet" href="style.css"><link rel="stylesheet" href="original-theme.css"><script defer src="characters.js"></script><script defer src="progress-bridge.js"></script><script defer src="review-store.js"></script><script defer src="home-connection.js"></script><script defer src="weak-store.js"></script><script defer src="weak-home.js"></script><script defer src="app.js"></script><link rel="stylesheet" href="auth.css"></head>
+<html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>社会クエスト｜いっしーと学ぶ冒険</title><link rel="stylesheet" href="style.css"><link rel="stylesheet" href="original-theme.css"><script defer src="characters.js"></script><script defer src="progress-bridge.js"></script><script defer src="review-store.js"></script><script defer src="home-connection.js"></script><script defer src="weak-store.js"></script><script defer src="weak-home.js"></script><script defer src="app.js"></script><link rel="stylesheet" href="auth.css">
+<style>
+/* ===== 社会クエスト / 授業の資料室（既存の CSS には触れません） ===== */
+.sq-resources{margin:30px 0;padding:26px 24px 28px;border:1px solid #dbe6f4;border-radius:22px;background:#fff;box-shadow:0 10px 28px rgba(30,65,107,.035)}
+.sq-resources *,.sq-library-dialog *{box-sizing:border-box}
+.sq-resources__eyebrow,.sq-library__eyebrow{margin:0 0 7px;color:#3677bd;font-weight:700;font-size:.84rem;letter-spacing:.04em}
+.sq-resources__title{margin:0;color:#2163ac;font-size:clamp(1.24rem,2vw,1.58rem);font-weight:800;line-height:1.4}
+.sq-resources__description{margin:6px 0 19px;color:#6d8097;font-size:.86rem;line-height:1.65}
+.sq-resources__grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.sq-resource-card{appearance:none;display:flex;align-items:center;gap:18px;width:100%;min-width:0;min-height:120px;padding:20px 21px;border:1.5px solid #bddaf7;border-radius:17px;background:linear-gradient(135deg,#f9fcff,#f1f7ff);color:#2369b7;text-decoration:none;text-align:left;font:inherit;cursor:pointer;transition:transform .16s,box-shadow .16s,border-color .16s}
+.sq-resource-card--print{border-color:#f0d18b;color:#a16a12;background:linear-gradient(135deg,#fffdf7,#fff9ec)}
+.sq-resource-card:hover{transform:translateY(-2px);box-shadow:0 9px 18px rgba(41,99,172,.09);border-color:#7db8ed}
+.sq-resource-card--print:hover{border-color:#e1af43}
+.sq-resource-card__icon{width:50px;height:50px;flex:0 0 50px;display:grid;place-items:center;border-radius:14px;background:#e3f1ff}
+.sq-resource-card--print .sq-resource-card__icon{background:#fff0ce}
+.sq-resource-card__icon svg{width:29px;height:29px}
+.sq-resource-card__copy{display:flex;flex:1;min-width:0;flex-direction:column;gap:6px}
+.sq-resource-card__copy strong{color:inherit;font-size:1.3rem;font-weight:800;line-height:1.4}
+.sq-resource-card__copy small{color:#738499;font-size:.8rem;line-height:1.5}
+.sq-resource-card__arrow{flex:0 0 auto;font-size:1.25rem;font-weight:800}
+.sq-library-dialog{position:fixed;box-sizing:border-box;width:min(760px,calc(100% - 28px));max-width:none;max-height:min(88dvh,820px);margin:auto;padding:0;border:1px solid #dce6f2;border-radius:22px;background:#fff;color:#263d55;box-shadow:0 22px 70px rgba(20,42,76,.22);overflow:auto}
+.sq-library-dialog::backdrop{background:rgba(19,36,60,.56)}
+.sq-library__inner{padding:28px}
+.sq-library__head{display:flex;align-items:start;justify-content:space-between;gap:15px}
+.sq-library__title{margin:0;color:#2467b0;font-size:1.55rem;line-height:1.45;font-weight:800}
+.sq-library__lead{margin:12px 0 22px;color:#6c8094;font-size:.9rem;line-height:1.7}
+.sq-library__close{appearance:none;flex:0 0 38px;width:38px;height:38px;padding:0;border:0;border-radius:99px;background:#f0f5fb;color:#60768c;font:inherit;font-size:1.3rem;line-height:1;cursor:pointer}
+.sq-library__group{margin:0 0 20px}
+.sq-library__group-title{display:flex;align-items:center;gap:9px;margin:0 0 10px;color:#385f87;font-size:.95rem;font-weight:800}
+.sq-library__group-title:before{content:"";width:4px;height:19px;background:#6aa8e7;border-radius:5px}
+.sq-library__list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.sq-library__item{display:flex;align-items:center;gap:11px;padding:15px 14px;border:1px solid #dce8f5;border-radius:13px;background:#f9fcff;color:#2468ad;text-decoration:none;font-size:.94rem;line-height:1.45;transition:background .15s,border-color .15s}
+.sq-library__item:hover{background:#edf6ff;border-color:#9fc6ee}
+.sq-library__item-icon{flex:0 0 30px;width:30px;height:30px;display:grid;place-items:center;border-radius:9px;background:#e3f0ff;color:#3880c7;font-size:1rem}
+.sq-library__item-label{flex:1;min-width:0;overflow-wrap:anywhere;font-weight:700}
+.sq-library__item-arrow{flex:0 0 auto;color:#7799b7;font-size:1.1rem}
+.sq-library__item-note{display:block;margin-top:3px;color:#7d90a3;font-size:.76rem;font-weight:400}
+.sq-library__pdf-group{margin:0 0 11px;overflow:hidden;border:1px solid #dce6f2;border-radius:14px;background:#fff}
+.sq-library__pdf-group summary{display:flex;align-items:center;gap:12px;min-height:65px;padding:13px 17px;cursor:pointer;list-style:none;background:#f8fbff;color:#2f648e;font-weight:800}
+.sq-library__pdf-group summary::-webkit-details-marker{display:none}
+.sq-library__pdf-group summary:after{content:"⌄";margin-left:auto;font-size:1.3rem;color:#789abb;transition:transform .15s}
+.sq-library__pdf-group[open] summary:after{transform:rotate(180deg)}
+.sq-library__pdf-group--history summary{background:#fffbf3;color:#986d25}
+.sq-library__pdf-group--civics summary{background:#f8f9fb;color:#687887}
+.sq-library__pdf-symbol{font-size:1.32rem}
+.sq-library__pill{padding:3px 8px;border-radius:99px;background:#e6f2ff;color:#4874a3;font-size:.72rem;font-weight:700}
+.sq-library__pdf-body{padding:14px 15px}
+.sq-library__pdf-body .sq-library__list{grid-template-columns:1fr}
+.sq-library__empty{margin:0;padding:14px 12px;color:#8494a4;text-align:center;font-size:.86rem;line-height:1.7}
+.sq-library__hint{margin:14px 0 0;color:#7e91a4;font-size:.8rem;line-height:1.7}
+.sq-resource-card:focus-visible,.sq-library-dialog button:focus-visible,.sq-library-dialog summary:focus-visible,.sq-library__item:focus-visible{outline:3px solid #317aca;outline-offset:3px}
+@media(max-width:680px){.sq-resources{margin:22px 0;padding:21px 16px;border-radius:18px}.sq-resources__grid{grid-template-columns:1fr;gap:11px}.sq-resource-card{min-height:92px;padding:15px;gap:13px}.sq-resource-card__icon{width:45px;height:45px;flex-basis:45px}.sq-resource-card__copy strong{font-size:1.18rem}.sq-library__inner{padding:22px 17px}.sq-library__list{grid-template-columns:1fr}.sq-library__title{font-size:1.3rem}}
+@media(prefers-reduced-motion:reduce){.sq-resource-card,.sq-library__item{transition:none}}
+</style>
+
+</head>
 <body class="auth-locked">
 <div class="auth-gate" id="authGate" aria-modal="true" role="dialog" aria-labelledby="authTitle">
   <div class="auth-card">
@@ -23,9 +78,190 @@
 <section class="hero" aria-labelledby="character-name"><div class="hero-copy"><p class="eyebrow">今日も、冒険のつづきを。</p><div class="level-tag" id="current-level"></div><h1 id="character-name"></h1><div class="speech" id="speech"></div><div class="growth"><div class="growth-label"><span id="growth-text"></span><span id="growth-count"></span></div><div class="progress" id="growth-progress" role="progressbar" aria-label="次のレベルへの成長" aria-valuemin="0" aria-valuemax="3"><i id="progress-fill"></i></div><p>学びを重ねるたび、新しい姿へ。</p></div></div><div class="hero-art"><span class="spark one">✦</span><span class="spark two">✧</span><img id="current-image" fetchpriority="high" width="480" height="480" alt=""><div class="next" id="next-character"></div></div></section>
 <section class="reviews" aria-labelledby="reviews-title"><div class="section-heading"><div><p class="eyebrow">覚えたことを、もう一度。</p><h2 id="reviews-title">今日の復習 <span class="count" id="review-count"></span></h2></div><span class="section-icon" aria-hidden="true">↻</span></div><div id="review-list"></div></section>
 <section class="learn" aria-labelledby="learn-title"><div class="section-heading"><div><p class="eyebrow">今日の学びを選ぼう</p><h2 id="learn-title">今日、授業で勉強した単元を<br class="mobile-break">自分で選んでね</h2></div></div><div class="subjects"><button class="subject geography" data-action="geo"><span class="subject-symbol" aria-hidden="true">◎</span><span><strong>地理</strong><small>世界と日本を探検しよう</small></span><b aria-hidden="true">→</b></button><button class="subject history" data-action="history"><span class="subject-symbol" aria-hidden="true">⌛</span><span><strong>歴史</strong><small>昔と今をつなぐ旅へ</small></span><b aria-hidden="true">→</b></button><button class="subject civics" disabled><span class="subject-symbol" aria-hidden="true">⚖</span><span><strong>公民</strong><small>準備中</small></span></button></div><div class="extras"><button class="extra" data-action="weak"><span aria-hidden="true">⚑</span><span><strong>苦手な10問</strong><small>もう一度で、自信に変えよう</small></span><b aria-hidden="true">→</b></button><button class="extra winter" disabled><span aria-hidden="true">❄</span><span><strong>冬休みクエスト</strong><small>冬休みにオープン・準備中</small></span></button></div></section>
+
+<!-- ===== 新機能：授業の資料室 ===== -->
+<section class="sq-resources" aria-labelledby="sq-resources-title">
+  <p class="sq-resources__eyebrow">授業を、もう一度。</p>
+  <h2 class="sq-resources__title" id="sq-resources-title">授業の資料室</h2>
+  <p class="sq-resources__description">授業動画でおさらいしたり、プリントの答えを確認したりしよう。</p>
+  <div class="sq-resources__grid">
+    <button class="sq-resource-card" id="sq-open-videos" type="button" aria-haspopup="dialog" aria-controls="sq-video-dialog">
+      <span class="sq-resource-card__icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="4.5" width="19" height="15" rx="4"/><path d="m10 8.5 5.5 3.5-5.5 3.5z" fill="currentColor" stroke="none"/></svg></span>
+      <span class="sq-resource-card__copy"><strong>授業動画</strong><small id="sq-video-subtitle">YouTubeの再生リストを見る</small></span>
+      <span class="sq-resource-card__arrow" aria-hidden="true">→</span>
+    </button>
+    <button class="sq-resource-card sq-resource-card--print" id="sq-open-prints" type="button" aria-haspopup="dialog" aria-controls="sq-prints-dialog">
+      <span class="sq-resource-card__icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 2.5h7l5 5v14H7a2 2 0 0 1-2-2v-15a2 2 0 0 1 2-2z"/><path d="M14 2.5v5h5M9 12h6M9 16h6"/></svg></span>
+      <span class="sq-resource-card__copy"><strong>授業プリント</strong><small id="sq-print-subtitle">地理・歴史・公民のPDFを見る</small></span>
+      <span class="sq-resource-card__arrow" aria-hidden="true">→</span>
+    </button>
+  </div>
+</section>
+<!-- ===== /新機能 ===== -->
+
 <button class="collection-banner" id="open-collection"><span class="book-icon" aria-hidden="true">▤</span><span><small>これまでの成長が、宝物になる。</small><strong>いっしー図鑑</strong></span><span class="collection-total" id="collection-total"></span><b aria-hidden="true">→</b></button>
 <footer>小さな一歩が、大きな冒険になる。</footer></main>
 <main id="collection" hidden><div class="collection-heading"><button class="back" id="back-home">← トップへ</button><p class="eyebrow">君といっしーの、成長の記録。</p><h1>いっしー図鑑</h1><p>出会った姿を振り返ろう。次はどんないっしーかな？</p><strong id="unlocked-count"></strong><div class="collection-tools"><button id="jump-current">今のいっしーを見る ↓</button></div></div><div id="catalog"></div><footer>今日の一歩も、きっと次につながっている。</footer></main>
+
+<!-- ===== 資料室のウィンドウ ===== -->
+<dialog id="sq-video-dialog" class="sq-library-dialog" aria-labelledby="sq-video-title">
+  <div class="sq-library__inner">
+    <div class="sq-library__head"><div><p class="sq-library__eyebrow">動画でおさらい</p><h2 class="sq-library__title" id="sq-video-title">授業動画</h2></div><button class="sq-library__close" type="button" data-sq-close aria-label="閉じる">×</button></div>
+    <p class="sq-library__lead">見たい動画を選ぼう。YouTubeの再生リストが新しいタブで開くよ。</p>
+    <div id="sq-video-list"></div>
+  </div>
+</dialog>
+<dialog id="sq-prints-dialog" class="sq-library-dialog" aria-labelledby="sq-prints-title">
+  <div class="sq-library__inner">
+    <div class="sq-library__head"><div><p class="sq-library__eyebrow">いつでも見直せる</p><h2 class="sq-library__title" id="sq-prints-title">授業プリント</h2></div><button class="sq-library__close" type="button" data-sq-close aria-label="閉じる">×</button></div>
+    <p class="sq-library__lead">教科を選んで、PDFを開こう。プリントはこれからも追加されるよ。</p>
+    <div id="sq-print-list"></div>
+    <p class="sq-library__hint">PDFは別のタブで開きます。スマートフォンでも閲覧できますが、大きなPDFは読み込みに時間がかかることがあります。</p>
+  </div>
+</dialog>
+
 <dialog id="notice"><button class="close" aria-label="閉じる">×</button><p class="eyebrow">社会クエスト</p><h2 id="notice-title"></h2><p id="notice-body"></p><button class="primary close-action">トップに戻る</button></dialog>
 <dialog id="image-viewer"><button class="close" onclick="this.closest('dialog').close()" aria-label="画像を閉じる">×</button><img alt=""></dialog><script defer src="growth-notice.js"></script>
+
+<script>
+/* =======================================================================
+  【先生向け：今後の追加は、この CONFIG の中だけでできます】
+
+  ■ YouTube を追加する方法
+    VIDEOS の末尾に { group: "授業動画", title: "動画名", url: "https://..." }, を1行追加。
+    group は "授業動画" / "補助・特別動画" または自由に追加してもOK。
+
+  ■ PDF を追加する方法
+    (1) HTMLと同じフォルダ内の prints/geography などにPDFを保存
+    (2) PDFS の末尾に { subject: "歴史", title: "タイトル", file: "prints/history/ファイル名.pdf" }, を追加
+    subject は "地理" / "歴史" / "公民" 。他の教科も追加可能。
+    ※ ファイルを入れただけでは一覧には出ません。PDFS に登録してください。
+    ※ 歴史PDFは prints/history/history_handouts_2026.pdf に置いてください。
+======================================================================= */
+const SQ_MATERIALS_CONFIG = {
+  VIDEOS: [
+    { group: "授業動画", title: "地理の授業動画", icon: "🌏", url: "https://www.youtube.com/playlist?list=PLjrP8WE3ANqUr1Yi0Sm56b8nbEjNFCvRY" },
+    { group: "授業動画", title: "歴史の授業動画", icon: "⌛", url: "https://www.youtube.com/playlist?list=PLjrP8WE3ANqXdu5_FdGwlC3Ot81xvPzbm" },
+    { group: "授業動画", title: "公民の授業動画", icon: "⚖", url: "https://www.youtube.com/playlist?list=PLjrP8WE3ANqUItPdXLdgBH489qf6cF7L-" },
+    { group: "補助・特別動画", title: "復習管理プリント説明動画", icon: "📝", url: "https://www.youtube.com/playlist?list=PLjrP8WE3ANqXwM9EH8mdCjO_ldB1b7EJn" },
+    { group: "補助・特別動画", title: "歴史人物紹介動画", icon: "👤", url: "https://www.youtube.com/playlist?list=PLSslTkLmXn20" },
+  ],
+  PDFS: [
+    { subject: "地理", title: "地理の授業プリント（解答・解説）", note: "全357ページ・2026年度", file: "prints/geography/geography_handouts_2026.pdf" },
+    // 歴史PDF（ファイルは prints/history/history_handouts_2026.pdf に配置）
+    { subject: "歴史", title: "歴史の授業プリント（解答・解説）", file: "prints/history/history_handouts_2026.pdf" },
+    // 公民PDFを追加する例：
+    // { subject: "公民", title: "公民の授業プリント", file: "prints/civics/civics_handouts_2026.pdf" },
+  ],
+};
+
+(function () {
+  "use strict";
+  const conf = SQ_MATERIALS_CONFIG;
+  const videoDialog = document.getElementById("sq-video-dialog");
+  const pdfDialog = document.getElementById("sq-prints-dialog");
+  const videoList = document.getElementById("sq-video-list");
+  const pdfList = document.getElementById("sq-print-list");
+  const subjects = ["地理", "歴史", "公民"];
+  const symbols = { "地理": "🌏", "歴史": "⌛", "公民": "⚖" };
+  const groups = new Map();
+
+  function videoUrl(raw) {
+    try {
+      const u = new URL(raw);
+      return u.protocol === "https:" && ["www.youtube.com", "youtube.com", "m.youtube.com"].includes(u.hostname.toLowerCase())
+        && u.pathname === "/playlist" && Boolean(u.searchParams.get("list")) ? u.href : null;
+    } catch (_) { return null; }
+  }
+  function pdfUrl(raw) {
+    if (typeof raw !== "string" || !raw.trim()) return null;
+    try {
+      const u = new URL(raw, document.baseURI);
+      if (u.protocol === "https:") return /\.pdf$/i.test(u.pathname) ? u.href : null;
+      // ローカルPDFは必ず prints フォルダ内（ディレクトリトラバーサルを禁止）
+      const root = new URL("prints/", document.baseURI);
+      return u.href.startsWith(root.href) && /\.pdf$/i.test(u.pathname) ? u.href : null;
+    } catch (_) { return null; }
+  }
+  function elem(tag, className, text) {
+    const e = document.createElement(tag);
+    if (className) e.className = className;
+    if (text != null) e.textContent = text;
+    return e;
+  }
+  function libraryLink(url, icon, title, note) {
+    const a = elem("a", "sq-library__item");
+    a.href = url;
+    a.target = "_blank";
+    a.rel = "noopener noreferrer";
+    const i = elem("span", "sq-library__item-icon", icon || "↗");
+    i.setAttribute("aria-hidden", "true");
+    const label = elem("span", "sq-library__item-label", title);
+    if (note) label.append(elem("small", "sq-library__item-note", note));
+    const arrow = elem("span", "sq-library__item-arrow", "↗");
+    arrow.setAttribute("aria-hidden", "true");
+    a.append(i, label, arrow);
+    return a;
+  }
+  function openDialog(d) { if (d && !d.open && typeof d.showModal === "function") d.showModal(); }
+  document.getElementById("sq-open-videos").addEventListener("click", () => openDialog(videoDialog));
+  document.getElementById("sq-open-prints").addEventListener("click", () => openDialog(pdfDialog));
+  document.querySelectorAll("[data-sq-close]").forEach(b => b.addEventListener("click", () => b.closest("dialog").close()));
+  [videoDialog, pdfDialog].forEach(d => d.addEventListener("click", e => { if (e.target === d) d.close(); }));
+
+  let videoCount = 0;
+  for (const v of conf.VIDEOS) {
+    const url = v && videoUrl(v.url);
+    if (!url || typeof v.title !== "string" || !v.title.trim()) continue;
+    const group = typeof v.group === "string" && v.group.trim() ? v.group.trim() : "その他の動画";
+    if (!groups.has(group)) groups.set(group, []);
+    groups.get(group).push({ url, icon: v.icon, title: v.title.trim() });
+    videoCount++;
+  }
+  for (const [name, items] of groups) {
+    const section = elem("section", "sq-library__group");
+    section.append(elem("h3", "sq-library__group-title", name));
+    const grid = elem("div", "sq-library__list");
+    for (const v of items) grid.append(libraryLink(v.url, v.icon || "▶", v.title));
+    section.append(grid);
+    videoList.append(section);
+  }
+  if (!videoCount) videoList.append(elem("p", "sq-library__empty", "動画は準備中です。"));
+  document.getElementById("sq-video-subtitle").textContent = `YouTubeの再生リスト ${videoCount}件`;
+
+  const pdfGroups = new Map(subjects.map(s => [s, []]));
+  let pdfCount = 0;
+  for (const p of conf.PDFS) {
+    const url = p && pdfUrl(p.file);
+    if (!url || typeof p.title !== "string" || !p.title.trim()) continue;
+    const subject = typeof p.subject === "string" && p.subject.trim() ? p.subject.trim() : "その他";
+    if (!pdfGroups.has(subject)) pdfGroups.set(subject, []);
+    pdfGroups.get(subject).push({ url, title: p.title.trim(), note: p.note || "PDFを開く" });
+    pdfCount++;
+  }
+  for (const [subject, items] of pdfGroups) {
+    const details = elem("details", "sq-library__pdf-group");
+    if (subject === "歴史") details.classList.add("sq-library__pdf-group--history");
+    if (subject === "公民") details.classList.add("sq-library__pdf-group--civics");
+    if (items.length && subject === "地理") details.open = true;
+    const summary = elem("summary");
+    summary.append(elem("span", "sq-library__pdf-symbol", symbols[subject] || "📘"));
+    summary.append(elem("span", "", `${subject}の授業プリント`));
+    summary.append(elem("span", "sq-library__pill", items.length ? `${items.length}件` : "準備中"));
+    details.append(summary);
+    const body = elem("div", "sq-library__pdf-body");
+    if (!items.length) {
+      body.append(elem("p", "sq-library__empty", "まだPDFがありません。追加されるまで待っていてね。"));
+    } else {
+      const list = elem("div", "sq-library__list");
+      for (const p of items) list.append(libraryLink(p.url, "▤", p.title, p.note));
+      body.append(list);
+    }
+    details.append(body);
+    pdfList.append(details);
+  }
+  document.getElementById("sq-print-subtitle").textContent = `地理・歴史・公民のプリント（登録済み ${pdfCount}件）`;
+})();
+</script>
+
 </body></html>
