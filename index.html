@@ -52,6 +52,42 @@
 .sq-resource-card:focus-visible,.sq-library-dialog button:focus-visible,.sq-library-dialog summary:focus-visible,.sq-library__item:focus-visible{outline:3px solid #317aca;outline-offset:3px}
 @media(max-width:680px){.sq-resources{margin:22px 0;padding:21px 16px;border-radius:18px}.sq-resources__grid{grid-template-columns:1fr;gap:11px}.sq-resource-card{min-height:92px;padding:15px;gap:13px}.sq-resource-card__icon{width:45px;height:45px;flex-basis:45px}.sq-resource-card__copy strong{font-size:1.18rem}.sq-library__inner{padding:22px 17px}.sq-library__list{grid-template-columns:1fr}.sq-library__title{font-size:1.3rem}}
 @media(prefers-reduced-motion:reduce){.sq-resource-card,.sq-library__item{transition:none}}
+
+/* ===== PDFを社会クエスト内で読む（スマホでも戻れる） ===== */
+.sq-pdf-viewer,.sq-pdf-viewer *{box-sizing:border-box}
+.sq-pdf-viewer{position:fixed;width:min(1020px,100%);max-width:none;max-height:none;height:min(96dvh,980px);margin:auto;padding:0;overflow:hidden;border:1px solid #d6e6f7;border-radius:18px;background:#edf4fc;color:#234261;box-shadow:0 24px 80px rgba(8,27,48,.28)}
+.sq-pdf-viewer::backdrop{background:rgba(12,31,56,.72)}
+.sq-pdf-viewer__layout{display:flex;flex-direction:column;width:100%;height:100%;min-height:0}
+.sq-pdf-viewer__header{display:flex;flex:0 0 auto;align-items:center;gap:13px;padding:12px 16px;background:white;border-bottom:1px solid #d9e6f4}
+.sq-pdf-viewer__back{flex:0 0 auto;appearance:none;display:inline-flex;align-items:center;justify-content:center;min-height:42px;padding:9px 13px;border:1px solid #bed9f3;border-radius:11px;color:#2168b4;background:#eaf4ff;font:inherit;font-weight:800;font-size:.94rem;cursor:pointer}
+.sq-pdf-viewer__title{min-width:0;flex:1;color:#32587d;font-weight:800;font-size:.92rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.sq-pdf-viewer__toolbar{display:flex;flex:0 0 auto;align-items:center;justify-content:center;flex-wrap:wrap;gap:8px;padding:10px 12px;background:#f8fbff;border-bottom:1px solid #d9e6f4}
+.sq-pdf-viewer__toolbar button,.sq-pdf-viewer__toolbar input{min-height:37px;border:1px solid #ccdcec;border-radius:9px;background:white;color:#28669e;font:inherit;font-size:.87rem}
+.sq-pdf-viewer__toolbar button{padding:7px 12px;cursor:pointer;font-weight:750}
+.sq-pdf-viewer__toolbar button:disabled{opacity:.38;cursor:not-allowed}
+.sq-pdf-viewer__toolbar input{width:57px;padding:5px 6px;text-align:center;appearance:textfield;-moz-appearance:textfield;font-weight:700}
+.sq-pdf-viewer__toolbar input::-webkit-inner-spin-button,.sq-pdf-viewer__toolbar input::-webkit-outer-spin-button{-webkit-appearance:none;margin:0}
+.sq-pdf-viewer__page-count{color:#57738e;font-size:.8rem;white-space:nowrap}
+.sq-pdf-viewer__divider{width:1px;height:27px;background:#dbe6f1;margin:0 3px}
+.sq-pdf-viewer__screen{flex:1 1 auto;min-height:0;overflow:auto;overscroll-behavior:contain;padding:18px 12px;text-align:center;-webkit-overflow-scrolling:touch}
+.sq-pdf-viewer__canvas{display:block;margin:0 auto;max-width:none;background:white;box-shadow:0 3px 20px rgba(27,48,76,.2)}
+.sq-pdf-viewer__canvas[hidden],.sq-pdf-viewer__status[hidden]{display:none !important}
+.sq-pdf-viewer__status{margin:22px auto;padding:14px 16px;max-width:400px;border-radius:12px;background:white;color:#486a89;line-height:1.7;font-size:.91rem}
+.sq-pdf-viewer__bottom{display:flex;flex:0 0 auto;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;padding:9px 15px;border-top:1px solid #d9e6f4;background:white}
+.sq-pdf-viewer__bottom a{font-size:.81rem;font-weight:700;color:#3078bc}
+.sq-pdf-viewer__home{appearance:none;padding:8px 12px;border:1px solid #d4e2ef;border-radius:10px;background:#f5f9fd;color:#2b678f;font:inherit;font-size:.81rem;font-weight:700;cursor:pointer}
+.sq-pdf-viewer button:focus-visible,.sq-pdf-viewer input:focus-visible,.sq-pdf-viewer a:focus-visible{outline:3px solid #317aca;outline-offset:2px}
+@media(max-width:680px){
+ .sq-pdf-viewer{width:100%;height:100dvh;border:0;border-radius:0}
+ .sq-pdf-viewer__header{padding:9px 10px;gap:8px}
+ .sq-pdf-viewer__back{padding:9px;min-height:43px;font-size:.84rem}
+ .sq-pdf-viewer__title{font-size:.78rem}
+ .sq-pdf-viewer__toolbar{gap:6px;padding:7px 5px}
+ .sq-pdf-viewer__toolbar button{padding:6px 9px}
+ .sq-pdf-viewer__divider{margin:0 1px}
+ .sq-pdf-viewer__screen{padding:9px 4px}
+ .sq-pdf-viewer__bottom{padding:7px 10px}
+}
 </style>
 
 </head>
@@ -116,7 +152,35 @@
     <div class="sq-library__head"><div><p class="sq-library__eyebrow">いつでも見直せる</p><h2 class="sq-library__title" id="sq-prints-title">授業プリント</h2></div><button class="sq-library__close" type="button" data-sq-close aria-label="閉じる">×</button></div>
     <p class="sq-library__lead">教科を選んで、PDFを開こう。プリントはこれからも追加されるよ。</p>
     <div id="sq-print-list"></div>
-    <p class="sq-library__hint">PDFは別のタブで開きます。スマートフォンでも閲覧できますが、大きなPDFは読み込みに時間がかかることがあります。</p>
+    <p class="sq-library__hint">PDFは社会クエスト内で読めます。「← プリント一覧へ」からいつでも戻れます。読み込めないときは別タブ表示も使えます。</p>
+  </div>
+</dialog>
+
+
+<!-- PDFは別タブへ移動せず、戻るボタン付きの画面で1ページずつ表示 -->
+<dialog id="sq-pdf-viewer" class="sq-pdf-viewer" aria-labelledby="sq-pdf-view-title">
+  <div class="sq-pdf-viewer__layout">
+    <div class="sq-pdf-viewer__header">
+      <button class="sq-pdf-viewer__back" type="button" id="sq-pdf-back">← プリント一覧へ</button>
+      <span class="sq-pdf-viewer__title" id="sq-pdf-view-title">授業プリント</span>
+    </div>
+    <div class="sq-pdf-viewer__toolbar" aria-label="PDFのページ操作">
+      <button type="button" id="sq-pdf-prev" aria-label="前のページ" disabled>‹ 前へ</button>
+      <input type="number" inputmode="numeric" aria-label="表示するページ番号" id="sq-pdf-page" min="1" value="1" disabled>
+      <span class="sq-pdf-viewer__page-count">/ <span id="sq-pdf-total">—</span> ページ</span>
+      <button type="button" id="sq-pdf-next" aria-label="次のページ" disabled>次へ ›</button>
+      <span class="sq-pdf-viewer__divider" aria-hidden="true"></span>
+      <button type="button" id="sq-pdf-zoom-out" aria-label="縮小" disabled>−</button>
+      <button type="button" id="sq-pdf-zoom-in" aria-label="拡大" disabled>＋</button>
+    </div>
+    <div class="sq-pdf-viewer__screen" id="sq-pdf-screen">
+      <p class="sq-pdf-viewer__status" id="sq-pdf-status" role="status" aria-live="polite">PDFを読み込んでいます…</p>
+      <canvas class="sq-pdf-viewer__canvas" id="sq-pdf-canvas" hidden aria-label="授業プリントのページ"></canvas>
+    </div>
+    <div class="sq-pdf-viewer__bottom">
+      <a id="sq-pdf-original" href="#" target="_blank" rel="noopener noreferrer">PDFを別タブで開く ↗</a>
+      <button type="button" class="sq-pdf-viewer__home" id="sq-pdf-home">社会クエストに戻る</button>
+    </div>
   </div>
 </dialog>
 
@@ -209,6 +273,145 @@ const SQ_MATERIALS_CONFIG = {
   document.querySelectorAll("[data-sq-close]").forEach(b => b.addEventListener("click", () => b.closest("dialog").close()));
   [videoDialog, pdfDialog].forEach(d => d.addEventListener("click", e => { if (e.target === d) d.close(); }));
 
+
+  // PDF.js は必要になったときだけ読み込む。iPhoneでも全ページを1枚ずつ描画。
+  // ライブラリが読み込めない環境用に「PDFを別タブで開く」も残しています。
+  const pdfViewer = document.getElementById("sq-pdf-viewer");
+  const pdfCanvas = document.getElementById("sq-pdf-canvas");
+  const pdfStatus = document.getElementById("sq-pdf-status");
+  const pdfScreen = document.getElementById("sq-pdf-screen");
+  const pdfPageInput = document.getElementById("sq-pdf-page");
+  const pdfTotal = document.getElementById("sq-pdf-total");
+  const pdfPrev = document.getElementById("sq-pdf-prev");
+  const pdfNext = document.getElementById("sq-pdf-next");
+  const pdfZoomOut = document.getElementById("sq-pdf-zoom-out");
+  const pdfZoomIn = document.getElementById("sq-pdf-zoom-in");
+  const pdfOriginal = document.getElementById("sq-pdf-original");
+  let pdfModulePromise = null;
+  let pdfDocument = null;
+  let pdfLoadingTask = null;
+  let pdfCurrentPage = 1;
+  let pdfZoom = 1;
+  let pdfRenderTask = null;
+  let pdfRequestSerial = 0;
+  let pdfActiveURL = null;
+
+  function pdfControls() {
+    const usable = Boolean(pdfDocument);
+    pdfPrev.disabled = !usable || pdfCurrentPage <= 1;
+    pdfNext.disabled = !usable || pdfCurrentPage >= pdfDocument.numPages;
+    pdfPageInput.disabled = !usable;
+    pdfPageInput.value = String(pdfCurrentPage);
+    pdfPageInput.max = usable ? String(pdfDocument.numPages) : "1";
+    pdfTotal.textContent = usable ? String(pdfDocument.numPages) : "—";
+    pdfZoomOut.disabled = !usable || pdfZoom <= .75;
+    pdfZoomIn.disabled = !usable || pdfZoom >= 2.5;
+  }
+  function pdfMessage(message) {
+    pdfStatus.textContent = message;
+    pdfStatus.hidden = false;
+    pdfCanvas.hidden = true;
+  }
+  function stopPdfRendering() {
+    if (pdfRenderTask) {
+      try { pdfRenderTask.cancel(); } catch (_) {}
+      pdfRenderTask = null;
+    }
+  }
+  async function showPdfPage(pageNumber) {
+    if (!pdfDocument || !pdfViewer.open) return;
+    const serial = ++pdfRequestSerial;
+    stopPdfRendering();
+    pdfCurrentPage = Math.min(pdfDocument.numPages, Math.max(1, Math.round(Number(pageNumber) || 1)));
+    pdfControls();
+    pdfMessage(`${pdfCurrentPage} ページを表示しています…`);
+    try {
+      const page = await pdfDocument.getPage(pdfCurrentPage);
+      if (serial !== pdfRequestSerial || !pdfViewer.open) return;
+      const natural = page.getViewport({ scale: 1 });
+      const available = Math.max(260, pdfScreen.clientWidth - 24);
+      const scale = Math.min(1.8, available / natural.width) * pdfZoom;
+      const viewport = page.getViewport({ scale });
+      const ratio = Math.min(window.devicePixelRatio || 1, 2);
+      pdfCanvas.width = Math.ceil(viewport.width * ratio);
+      pdfCanvas.height = Math.ceil(viewport.height * ratio);
+      pdfCanvas.style.width = `${viewport.width}px`;
+      pdfCanvas.style.height = `${viewport.height}px`;
+      const ctx = pdfCanvas.getContext("2d", { alpha: false });
+      const transform = ratio !== 1 ? [ratio, 0, 0, ratio, 0, 0] : null;
+      pdfRenderTask = page.render({ canvasContext: ctx, viewport, transform });
+      await pdfRenderTask.promise;
+      if (serial !== pdfRequestSerial || !pdfViewer.open) return;
+      pdfRenderTask = null;
+      pdfCanvas.hidden = false;
+      pdfStatus.hidden = true;
+      pdfScreen.scrollTop = 0;
+      pdfScreen.scrollLeft = 0;
+    } catch (error) {
+      if (serial !== pdfRequestSerial || !pdfViewer.open || error?.name === "RenderingCancelledException") return;
+      pdfMessage("このページを表示できませんでした。下の『PDFを別タブで開く』からも閲覧できます。");
+    }
+  }
+  async function openPdfInside(url, title) {
+    if (pdfDialog.open) pdfDialog.close();
+    const serial = ++pdfRequestSerial;
+    stopPdfRendering();
+    if (!pdfViewer.open) pdfViewer.showModal();
+    document.getElementById("sq-pdf-view-title").textContent = title;
+    pdfOriginal.href = url;
+    pdfCurrentPage = 1;
+    pdfZoom = 1;
+    if (pdfActiveURL !== url) {
+      pdfDocument = null;
+      if (pdfLoadingTask) { try { pdfLoadingTask.destroy(); } catch (_) {} }
+      pdfLoadingTask = null;
+      pdfActiveURL = url;
+    }
+    pdfControls();
+    pdfMessage("PDFを読み込んでいます。大きなファイルは少し時間がかかります…");
+    try {
+      if (!pdfModulePromise) {
+        pdfModulePromise = import("https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.10.38/pdf.min.mjs").catch(err => {
+          pdfModulePromise = null;
+          throw err;
+        });
+      }
+      const pdfjsLib = await pdfModulePromise;
+      if (serial !== pdfRequestSerial || !pdfViewer.open) return;
+      pdfjsLib.GlobalWorkerOptions.workerSrc = "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.10.38/pdf.worker.min.mjs";
+      if (!pdfDocument) {
+        pdfLoadingTask = pdfjsLib.getDocument({ url });
+        const documentResult = await pdfLoadingTask.promise;
+        if (serial !== pdfRequestSerial || !pdfViewer.open) {
+          await documentResult.destroy();
+          return;
+        }
+        pdfDocument = documentResult;
+      }
+      pdfControls();
+      await showPdfPage(1);
+    } catch (error) {
+      if (serial !== pdfRequestSerial || !pdfViewer.open) return;
+      pdfMessage("PDFの画面内表示ができませんでした。下の『PDFを別タブで開く』を使ってください。");
+    }
+  }
+  function closePdfInside(returnToPrints) {
+    ++pdfRequestSerial;
+    stopPdfRendering();
+    if (pdfViewer.open) pdfViewer.close();
+    if (returnToPrints) openDialog(pdfDialog);
+  }
+  document.getElementById("sq-pdf-back").addEventListener("click", () => closePdfInside(true));
+  document.getElementById("sq-pdf-home").addEventListener("click", () => closePdfInside(false));
+  pdfPrev.addEventListener("click", () => showPdfPage(pdfCurrentPage - 1));
+  pdfNext.addEventListener("click", () => showPdfPage(pdfCurrentPage + 1));
+  pdfZoomOut.addEventListener("click", () => { pdfZoom = Math.max(.75, Math.round((pdfZoom - .25) * 100) / 100); showPdfPage(pdfCurrentPage); });
+  pdfZoomIn.addEventListener("click", () => { pdfZoom = Math.min(2.5, Math.round((pdfZoom + .25) * 100) / 100); showPdfPage(pdfCurrentPage); });
+  pdfPageInput.addEventListener("change", () => showPdfPage(pdfPageInput.value));
+  pdfViewer.addEventListener("cancel", event => { event.preventDefault(); closePdfInside(true); });
+  pdfViewer.addEventListener("click", event => { if (event.target === pdfViewer) closePdfInside(true); });
+  pdfViewer.addEventListener("close", () => { ++pdfRequestSerial; stopPdfRendering(); });
+
   let videoCount = 0;
   for (const v of conf.VIDEOS) {
     const url = v && videoUrl(v.url);
@@ -254,7 +457,18 @@ const SQ_MATERIALS_CONFIG = {
       body.append(elem("p", "sq-library__empty", "まだPDFがありません。追加されるまで待っていてね。"));
     } else {
       const list = elem("div", "sq-library__list");
-      for (const p of items) list.append(libraryLink(p.url, "▤", p.title, p.note));
+      for (const p of items) {
+        const link = libraryLink(p.url, "▤", p.title, p.note);
+        link.removeAttribute("target");
+        link.removeAttribute("rel");
+        link.querySelector(".sq-library__item-arrow").textContent = "→";
+        link.addEventListener("click", event => {
+          if (event.ctrlKey || event.metaKey || event.shiftKey || event.altKey || event.button !== 0) return;
+          event.preventDefault();
+          openPdfInside(p.url, p.title);
+        });
+        list.append(link);
+      }
       body.append(list);
     }
     details.append(body);
